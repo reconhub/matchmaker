@@ -79,9 +79,9 @@
 #' 
 #' # Read in dictionary and coded date examples --------------------
 #'
-#' matchstick <- read.csv(linelist_example("spelling-dictionary.csv"), 
+#' matchstick <- read.csv(matchmaker_example("spelling-dictionary.csv"), 
 #'                      stringsAsFactors = FALSE)
-#' dat      <- read.csv(linelist_example("coded-data.csv"), 
+#' dat      <- read.csv(matchmaker_example("coded-data.csv"), 
 #'                      stringsAsFactors = FALSE)
 #' dat$date <- as.Date(dat$date)
 #'
