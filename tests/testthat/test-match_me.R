@@ -161,7 +161,7 @@ test_that("match_me will be silent if the data are already cleaned", {
 test_that("match_me will throw a warning for completely unknown data", {
 
   expect_warning(match_me(letters[1:4], corrections), 
-                 "None of the variables in letters\\[1:4\\] were found in corrections. Did you use the correct matchstick?")
+                 "None of the variables in letters\\[1:4\\] were found in corrections. Did you use the correct dictionary?")
 
 })
 

@@ -44,7 +44,7 @@
 #'                and are not missing. 
 #'
 #' }
-#' \subsection{Values (second column)}{
+#' \subsection{Values (`to` column)}{
 #' 
 #' The values will replace their respective keys exactly as they are presented.
 #'
@@ -162,7 +162,7 @@ match_me <- function(x = character(), matchstick = data.frame(),
     stop("matchstick must have two columns coerceable to a character")
   }
 
-  keys <- as.character(keys)
+  keys   <- as.character(keys)
   values <- as.character(values)
 
 
@@ -191,7 +191,7 @@ match_me <- function(x = character(), matchstick = data.frame(),
     the_words <- deparse(the_call[["matchstick"]])
 
     if (no_keys && no_values && no_regex) {
-      msg <- "None of the variables in %s were found in %s. Did you use the correct matchstick?" 
+      msg <- "None of the variables in %s were found in %s. Did you use the correct dictionary?" 
       msg <- sprintf(msg, the_x, the_words)
       warning(msg)
     }

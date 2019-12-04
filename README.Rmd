@@ -1,5 +1,6 @@
 ---
 output: github_document
+title: 'matchmaker R package'
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -18,39 +19,46 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN status](https://www.r-pkg.org/badges/version/matchmaker)](https://CRAN.R-project.org/package=matchmaker)
+[![Travis build status](https://travis-ci.org/reconhub/matchmaker.svg?branch=master)](https://travis-ci.org/reconhub/matchmaker)
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/reconhub/matchmaker?branch=master&svg=true)](https://ci.appveyor.com/project/reconhub/matchmaker)
 <!-- badges: end -->
 
-The goal of matchmaker is to ...
+The goal of matchmaker is to provide dictionary-based cleaning in a flexible manner.
 
 ## Installation
 
-You can install the released version of matchmaker from [CRAN](https://CRAN.R-project.org) with:
+You can install the development version of matchmaker from GitHub with:
 
 ``` r
-install.packages("matchmaker")
+# install.packages("remotes")
+remotes::install_github("reconhub/matchmaker")
 ```
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+The matchmaker package has two user-facing functions that perform dictionary-based cleaning:
+
+
+ - `match_me()` will translate the values in a single vector
+ - `match_us()` will translate values in all specified columns of a data frame 
 
 ```{r example}
 library(matchmaker)
-## basic example code
+dict     <- read.csv(matchmaker_example("spelling-dictionary.csv"), 
+                     stringsAsFactors = FALSE)
+dat      <- read.csv(matchmaker_example("coded-data.csv"), 
+                     stringsAsFactors = FALSE)
+dat$date <- as.Date(dat$date)
+#
+# Clean spelling based on dictionary ----------------------------- 
+#
+dict # show the dict
+head(dat) # show the data
+
+res1 <- match_us(dat,
+                 matchbook = dict,
+                 from = "options",
+                 to = "values",
+                 by = "grp")
+head(res1)
 ```
-
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub!

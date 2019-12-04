@@ -8,29 +8,28 @@
 #' @param matchbook a data frame or named list of data frames with at least two
 #'   columns defining the word list to be used. If this is a data frame, a third
 #'   column must be present to split the matchbook by column in `x` (see
-#'   `spelling_vars`).
+#'   `by`).
 #'
-#' @param spelling_vars character or integer. If `matchbook` is a data frame,
+#' @param by character or integer. If `matchbook` is a data frame,
 #'   then this column in defines the columns in `x` corresponding to each
 #'   section of the `matchbook` data frame. This defaults to `3`, indicating the
 #'   third column is to be used.
 #'
-#' @param sort_by a character the column to be used for sorting the values in
+#' @param order a character the column to be used for sorting the values in
 #'   each data frame. If the incoming variables are factors, this determines how
 #'   the resulting factors will be sorted.
 #' 
 #' @param warn if `TRUE`, warnings and errors from [match_me()] will be 
 #'   shown as a single warning. Defaults to `FALSE`, which shows nothing.
 #'
-#' @inheritParams clean_variable_labels
 #' @inheritParams match_me
 #'
 #' @details By default, this applies the function [match_me()] to all
-#'   columns specified by the column names listed in `spelling_vars`, or, if a
+#'   columns specified by the column names listed in `by`, or, if a
 #'   global dictionary is used, this includes all `character` and `factor`
 #'   columns as well.
 #'
-#' \subsection{spelling_vars}{
+#' \subsection{`by` column}{
 #' 
 #' Spelling variables within `matchbook` represent keys that you want to match
 #' to column names in `x` (the data set). These are expected to match exactly
@@ -44,21 +43,21 @@
 #'
 #' \subsection{Global matchbook}{
 #' 
-#' A global matchstick is a set of definitions applied to all valid columns of `x`
-#' indiscriminantly.
+#' A global matchbook is a set of definitions applied to all valid columns of
+#' `x` indiscriminantly.
 #'
-#'  - **.global spelling_var**: If you want to apply a set of definitions to all
-#'     valid columns in addition to specified columns, then you can include a
-#'     `.global` group in the `spelling_var` column of your `matchbook` data
-#'     frame. This is useful for setting up a dictionary of common spelling 
-#'     errors. *NOTE: specific variable definitions will override global
-#'     defintions.* For example: if you have a column for cardinal directions
-#'     and a definiton for `N = North`, then the global variable `N = no` will
-#'     not override that. See Example.
+#'  - **.global keyword in `by`**: If you want to apply a set of definitions to
+#'  all valid columns in addition to specified columns, then you can include a
+#'  `.global` group in the `by` column of your `matchbook` data frame. This is
+#'  useful for setting up a dictionary of common spelling errors. *NOTE:
+#'  specific variable definitions will override global defintions.* For
+#'  example: if you have a column for cardinal directions and a definiton for
+#'  `N = North`, then the global variable `N = no` will not override that. See
+#'  Example.
 #'
-#'  - **`spelling_vars = NULL`**: If you want your data frame to be applied to
+#'  - **`by = NULL`**: If you want your data frame to be applied to
 #'    all character/factor columns indiscriminantly, then setting 
-#'    `spelling_vars = NULL` will use that matchstick globally.
+#'    `by = NULL` will use that matchstick globally.
 #'
 #' }
 #'
@@ -79,22 +78,22 @@
 #' 
 #' # Read in dictionary and coded date examples --------------------
 #'
-#' matchstick <- read.csv(matchmaker_example("spelling-dictionary.csv"), 
+#' dict     <- read.csv(matchmaker_example("spelling-dictionary.csv"), 
 #'                      stringsAsFactors = FALSE)
 #' dat      <- read.csv(matchmaker_example("coded-data.csv"), 
 #'                      stringsAsFactors = FALSE)
 #' dat$date <- as.Date(dat$date)
 #'
-#' # Clean spelling based on matchstick ------------------------------ 
+#' # Clean spelling based on dictionary ----------------------------- 
 #'
-#' matchstick # show the matchstick
+#' dict # show the dict
 #' head(dat) # show the data
 #' 
 #' res1 <- match_us(dat,
-#'                                 matchbook = matchstick,
-#'                                 from = "options",
-#'                                 to = "values",
-#'                                 spelling_vars = "grp")
+#'                  matchbook = dict,
+#'                  from = "options",
+#'                  to = "values",
+#'                  by = "grp")
 #' head(res1)
 #' 
 #' # You can ensure the order of the factors are correct by specifying 
@@ -103,35 +102,32 @@
 #' dat[] <- lapply(dat, as.factor)
 #' as.list(head(dat))
 #' res2 <- match_us(dat, 
-#'                                 matchbook = matchstick, 
-#'                                 from = "options",
-#'                                 to = "values",
-#'                                 spelling_vars = "grp", 
-#'                                 sort_by = "orders")
+#'                  matchbook = dict, 
+#'                  from = "options",
+#'                  to = "values",
+#'                  by = "grp", 
+#'                  order = "orders")
 #' head(res2)
 #' as.list(head(res2))
 #' 
-match_us <- function(x = data.frame(), matchbook = list(),
-                                    from = 1, to = 2, spelling_vars = 3,
-                                    sort_by = NULL, classes = NULL, 
-                                    warn = FALSE) {
+match_us <- function(x = data.frame(), matchbook = list(), from = 1, to = 2,
+                     by = 3, order = NULL, warn = FALSE) {
   
   if (length(x) == 0 || !is.data.frame(x)) {
     stop("x must be a data frame")
   }
-  if (is.null(classes)) {
-    classes <- i_find_classes(x)
-  }
+
+  classes <- vapply(x, inherits, logical(1), c("character", "factor"))
 
   # Define columns viable for manipulation ------------------------------------
   # Because this is a global manipulator, only work on characters or factors
-  unprotected <- names(x)[classes %in% c("character", "factor")]
+  unprotected <- names(x)[classes]
   
   if (length(matchbook) == 0 || !is.list(matchbook)) {
     stop("matchbook must be a list of data frames")
   } 
 
-  # There is one big dictionary with spelling_vars -----------------------------
+  # There is one big dictionary with by -----------------------------
   if (is.data.frame(matchbook)) {
 
     # the from and to columns exist
@@ -139,21 +135,21 @@ match_us <- function(x = data.frame(), matchbook = list(),
     to_exists   <- i_check_scalar(to)   && i_check_column_name(to, names(matchbook))
 
     if (!from_exists || !to_exists) {
-      stop("`from` and `to` must refer to columns in the matchstick")
+      stop("`from` and `to` must refer to columns in the dictionary")
     }
 
-    # There is a spelling_vars column ----------------------------------------
-    spelling_vars_exists <- i_check_scalar(spelling_vars)
+    # There is a by column ----------------------------------------
+    by_exists <- i_check_scalar(by)
 
-    if (spelling_vars_exists) {
-      valid_spelling_vars <- i_check_column_name(spelling_vars, names(matchbook))
-      if (valid_spelling_vars) {
-        matchbook <- split(matchbook, matchbook[[spelling_vars]])
+    if (by_exists) {
+      valid_by <- i_check_column_name(by, names(matchbook))
+      if (valid_by) {
+        matchbook <- split(matchbook, matchbook[[by]])
       } else {
-        stop("spelling_vars must be the name or position of a column in the matchstick")
+        stop("`by` must be the name or position of a column in the dictionary")
       }
     } else {
-      warning("Using matchstick globally across all character/factor columns.")
+      warning("Using dictionary globally across all character/factor columns.")
     }
 
   } else {
@@ -169,23 +165,23 @@ match_us <- function(x = data.frame(), matchbook = list(),
   }
 
   one_big_dictionary <- is.data.frame(matchbook)
-  exists_sort_by     <- !is.null(sort_by)
+  exists_order       <- !is.null(order)
   
   if (one_big_dictionary) {
     # If there is one big dictionary ------------------------------------
-    if (exists_sort_by && sort_by %in% names(matchbook)) {
-      matchbook <- matchbook[order(matchbook[[sort_by]]), , drop = FALSE]
+    if (exists_order && order %in% names(matchbook)) {
+      matchbook <- matchbook[order(matchbook[[order]]), , drop = FALSE]
     }
     # Iterate over the names of the data -------------------
     to_iterate_x <- unprotected
     to_iterate_matchstick <- unprotected
   } else {
     # If there is a list of dictionaries --------------------------------
-    if (exists_sort_by) {
+    if (exists_order) {
       for (i in names(matchbook)) {
         di <- matchbook[[i]]
         # Only sort if there is something to sort by -------
-        the_sorts  <- if (any(names(di) == sort_by)) order(di[[sort_by]]) else TRUE
+        the_sorts  <- if (any(names(di) == order)) order(di[[order]]) else TRUE
         matchbook[[i]] <- matchbook[[i]][the_sorts, , drop = FALSE]
       }
     }
@@ -242,7 +238,7 @@ match_us <- function(x = data.frame(), matchbook = list(),
     
     # Warn if any variables in matchstick don't match any columns in x ------
     if (length(vars_nomatch) > 0) {
-      warning("The following variable(s) in 'matchstick' did not match any ",
+      warning("The following variable(s) in the dictionary did not match any ",
               "columns in 'x': ", paste(vars_nomatch, collapse = ", "),
               call. = FALSE)
     }

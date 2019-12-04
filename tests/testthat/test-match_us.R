@@ -54,7 +54,7 @@ test_that("columns can be specified for the data despite order", {
   expect_identical(match_us(my_data_frame, corrections[sample(4)],
                                            from = "bad", 
                                            to = "good",
-                                           spelling_vars = "column"
+                                           by = "column"
                                           ),
                    cleaned_data)
             
@@ -64,19 +64,19 @@ test_that("a single error will be thrown if the columns are not in the correct o
 
   expect_error(match_us(my_data_frame, corrections,
                                        from = "hello", to = "there"),
-               "`from` and `to` must refer to columns in the matchstick")
+               "`from` and `to` must refer to columns in the dictionary")
   expect_error(match_us(my_data_frame, corrections,
                                        from = 0, to = 11),
-               "`from` and `to` must refer to columns in the matchstick")
+               "`from` and `to` must refer to columns in the dictionary")
   expect_error(match_us(my_data_frame, corrections,
                                        from = 1, to = 11),
-               "`from` and `to` must refer to columns in the matchstick")
+               "`from` and `to` must refer to columns in the dictionary")
   expect_error(match_us(my_data_frame, corrections,
                                        from = 6, to = "good"),
-               "`from` and `to` must refer to columns in the matchstick")
+               "`from` and `to` must refer to columns in the dictionary")
   expect_error(match_us(my_data_frame, corrections,
                                        from = "bad", to = 99),
-               "`from` and `to` must refer to columns in the matchstick")
+               "`from` and `to` must refer to columns in the dictionary")
 
 })
 
@@ -120,8 +120,6 @@ test_that("errors will be captured and passed through; error'd cols are preserve
   expect_is(lc[[4]], "list")
   expect_named(lc, names(with_list))
   expect_identical(with_list[[4]], lc[[4]])
-  expect_warning(lc <- clean_data(with_list, matchbook = corr, warn_spelling = TRUE), err)
-
 
 })
 
@@ -130,15 +128,15 @@ test_that("sorting works as expected", {
 
   # sorting by data.frame 
   test_sorted_df <- match_us(my_data_frame, 
-                                             corrections,
-                                             spelling_vars = "column",
-                                             sort_by = "orders"
+                             corrections,
+                             by = "column",
+                             order = "orders"
   )
 
   # sorting by list
   test_sorted_ls <- match_us(my_data_frame, 
-                                             clist,
-                                             sort_by = "orders"
+                             clist,
+                             order = "orders"
   )
   resorted_trt <- forcats::fct_relevel(cleaned_data$treatment, c("missing", "no", "yes"))
   expect_identical(test_sorted_df, test_sorted_ls)
@@ -147,15 +145,15 @@ test_that("sorting works as expected", {
 
 })
 
-test_that("global data frame works if spelling_vars = NULL", { 
+test_that("global data frame works if by = NULL", { 
 
   expect_error({
-    global_test <- match_us(my_data_frame, corrections, spelling_vars = 69)
-  }, "spelling_vars must be the name or position of a column in the matchstick")
+    global_test <- match_us(my_data_frame, corrections, by = 69)
+  }, "`by` must be the name or position of a column in the dictionary")
 
   expect_warning({
-    global_test <- match_us(my_data_frame, corrections, spelling_vars = NULL)
-  }, "Using matchstick globally across all character/factor columns.")
+    global_test <- match_us(my_data_frame, corrections, by = NULL)
+  }, "Using dictionary globally across all character/factor columns.")
 
   resorted_trt <- forcats::fct_relevel(cleaned_data$treatment, "missing") 
   expect_identical(global_test$raboof, cleaned_data$raboof) 
