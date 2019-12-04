@@ -19,9 +19,11 @@ Description: The 'matchmaker' package provides flexible dictionary-based
     cleaning that allows users to specify implicit and explicit missing data,
     regular expressions for both data and columns, and global matches, while
     respecting ordering of factors. 
+URL: https://repidemicsconsortium/matchmaker, https://github.com/reconhub/matchmaker
 License: GPL-3
 Suggests: 
-    testthat
+    testthat,
+    covr
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
