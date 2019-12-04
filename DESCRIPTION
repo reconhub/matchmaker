@@ -21,7 +21,8 @@ Description: The 'matchmaker' package provides flexible dictionary-based
     respecting ordering of factors. 
 License: GPL-3
 Suggests: 
-    testthat
+    testthat,
+    covr
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
