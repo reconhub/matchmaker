@@ -86,10 +86,6 @@ all character/factor columns indiscriminantly, then setting
 
 }
 }
-\note{
-This function will only parse character and factor columns to protect
-numeric and Date columns from conversion to character.
-}
 \examples{
 
 # Read in dictionary and coded date examples --------------------

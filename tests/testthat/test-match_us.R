@@ -52,12 +52,50 @@ test_that("a list of data frames is needed for the second part", {
 test_that("columns can be specified for the data despite order", {
 
   expect_identical(match_us(my_data_frame, corrections[sample(4)],
-                                           from = "bad", 
-                                           to = "good",
-                                           by = "column"
-                                          ),
+                            from = "bad", 
+                            to = "good",
+                            by = "column"
+                           ),
                    cleaned_data)
             
+})
+
+test_that("definitions with missing from, to, and order will be ignored", {
+
+  # Example: x column is specified
+  mdf <- cbind(my_data_frame, x = 1:11, y = 1:11 > 5)
+  cxn <- rbind(corrections, c(bad = NA, good = NA, column = "x", orders = NA))
+  cxn$junk <- sample(letters, 11)
+  cxn$more_junk <- runif(11)
+
+  res <- match_us(mdf, cxn)
+
+  expect_equal(res$x, 1:11)
+  expect_equal(res$y, 1:11 > 5)
+
+  # Example: y column is specified
+  cxn[nrow(cxn), "column"] <- "y"
+
+  res <- match_us(mdf, cxn)
+
+  expect_equal(res$x, 1:11)
+  expect_equal(res$y, 1:11 > 5)
+
+  # Example, missing data are entered into the "treatment" column
+  new_junk <- data.frame(
+    bad       = NA,
+    good      = NA,
+    column    = "treatment",
+    orders    = NA,
+    junk      = "what",
+    more_junk = pi
+  )
+  res <- match_us(mdf, rbind(cxn, new_junk))
+
+  expect_equal(res$x, 1:11)
+  expect_equal(res$y, 1:11 > 5)
+  expect_equal(res$treatment, cleaned_data$treatment)
+
 })
 
 test_that("a single error will be thrown if the columns are not in the correct order", {
