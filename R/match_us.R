@@ -61,9 +61,6 @@
 #'
 #' }
 #'
-#' 
-#' @note This function will only parse character and factor columns to protect
-#'   numeric and Date columns from conversion to character. 
 #'
 #' @return a data frame with re-defined data based on the dictionary 
 #'
@@ -144,7 +141,17 @@ match_us <- function(x = data.frame(), matchbook = list(), from = 1, to = 2,
     if (by_exists) {
       valid_by <- i_check_column_name(by, names(matchbook))
       if (valid_by) {
-        matchbook <- split(matchbook, matchbook[[by]])
+        byname <- names(matchbook[by])
+
+        # Discard any rows that are completely missing ----------- 
+        norows <- apply(matchbook[names(matchbook) != byname],
+          MARGIN = 1,
+          FUN    = function(i) !all(is.na(i))
+        )
+        matchbook <- matchbook[norows, , drop = FALSE]
+        
+        # Split the matchbook here -------------------------------
+        matchbook <- split(matchbook, matchbook[[byname]])
       } else {
         stop("`by` must be the name or position of a column in the dictionary")
       }
