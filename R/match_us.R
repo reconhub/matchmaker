@@ -144,9 +144,10 @@ match_us <- function(x = data.frame(), matchbook = list(), from = 1, to = 2,
         byname <- names(matchbook[by])
 
         # Discard any rows that are completely missing ----------- 
-        norows <- apply(matchbook[names(matchbook) != byname],
+        norows <- apply(matchbook,
           MARGIN = 1,
-          FUN    = function(i) !all(is.na(i))
+          FUN    = function(i, b) !all(is.na(i[b])),
+          b      = c(from, to)
         )
         matchbook <- matchbook[norows, , drop = FALSE]
         
