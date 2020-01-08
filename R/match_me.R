@@ -1,12 +1,12 @@
-#' Rename values in a vector based on a matchstick
+#' Rename values in a vector based on a dictionary
 #'
 #' This function provides an interface for [forcats::fct_recode()], 
 #' [forcats::fct_explicit_na()], and [forcats::fct_relevel()] in such a way that
-#' a data matchstick can be imported from a data frame. 
+#' a data dictionary can be imported from a data frame. 
 #'
 #' @param x a character or factor vector
 #'
-#' @param matchstick a matrix or data frame defining mis-spelled words or keys
+#' @param dictionary a matrix or data frame defining mis-spelled words or keys
 #' in one column (`from`) and replacement values (`to`) in another
 #' column. There are keywords that can be appended to the `from` column for
 #' addressing default values and missing data.
@@ -21,7 +21,7 @@
 #' @param warn_default a `logical`. When a `.default` keyword is set and 
 #'   `warn_default = TRUE`, a warning will be issued listing the variables
 #'   that were changed to the default value. This can be used to update your
-#'   matchstick.
+#'   dictionary.
 #' 
 #' @param anchor_regex a `logical`. When `TRUE` (default), any regex within
 #'   the keywork 
@@ -31,7 +31,7 @@
 #'
 #' \subsection{Keys (`from` column)}{
 #' 
-#' The `from` column of the matchstick will contain the keys that you want to
+#' The `from` column of the dictionary will contain the keys that you want to
 #' match in your current data set. These are expected to match exactly with
 #' the exception of three reserved keywords that start with a full stop:
 #'
@@ -40,7 +40,7 @@
 #'    should be an unquoted, valid, PERL-flavored regular expression. Any
 #'    whitespace padding the regular expression is discarded.
 #'  - `.missing`: replaces any missing values (see NOTE)
-#'  - `.default`: replaces **ALL** values that are not defined in the matchstick
+#'  - `.default`: replaces **ALL** values that are not defined in the dictionary
 #'                and are not missing. 
 #'
 #' }
@@ -49,7 +49,7 @@
 #' The values will replace their respective keys exactly as they are presented.
 #'
 #' There is currently one recognised keyword that can be placed in the `to` 
-#' column of your matchstick:
+#' column of your dictionary:
 #'
 #'  - `.na`: Replace keys with missing data. When used in combination with the
 #'    `.missing` keyword (in column 1), it can allow you to differentiate
@@ -59,16 +59,16 @@
 #'
 #' @note If there are any missing values in the `from` column (keys), then they
 #' are automatically converted to the character "NA" with a warning. If you want
-#' to target missing data with your matchstick, use the `.missing` keyword. The
+#' to target missing data with your dictionary, use the `.missing` keyword. The
 #' `.regex` keyword uses [gsub()] with the `perl = TRUE` option for replacement.
 #'
 #' @return a vector of the same type as `x` with mis-spelled labels cleaned. 
 #'   Note that factors will be arranged by the order presented in the data 
-#'   matchstick; other levels will appear afterwards.  
+#'   dictionary; other levels will appear afterwards.  
 #'
 #' @author Zhian N. Kamvar
 #'
-#' @seealso [match_us()] for an implementation that acts across
+#' @seealso [match_df()] for an implementation that acts across
 #'   multiple variables in a data frame.
 #'
 #' @export
@@ -86,7 +86,7 @@
 #' my_data <- c(letters[1:5], sample(corrections$bad[-5], 10, replace = TRUE))
 #' my_data[sample(6:15, 2)] <- NA  # with missing elements
 #'
-#' match_me(my_data, corrections)
+#' match_vec(my_data, corrections)
 #'
 #' # You can use regular expressions to simplify your list
 #' corrections <- data.frame(
@@ -100,14 +100,14 @@
 #' corrections_with_default
 #' 
 #' # a warning will be issued about the data that were converted
-#' match_me(my_data, corrections_with_default)
+#' match_vec(my_data, corrections_with_default)
 #'
 #' # use the warn_default = FALSE, if you are absolutely sure you don't want it.
-#' match_me(my_data, corrections_with_default, warn_default = FALSE)
+#' match_vec(my_data, corrections_with_default, warn_default = FALSE)
 #'
-#' # The function will give you a warning if the matchstick does not
+#' # The function will give you a warning if the dictionary does not
 #' # match the data
-#' match_me(letters, corrections)
+#' match_vec(letters, corrections)
 #'
 #' # The can be used for translating survey output
 #'
@@ -119,12 +119,12 @@
 #'   option_name = c("Yes", "No", ".na", "Missing"),
 #'   stringsAsFactors = FALSE
 #' )
-#' match_me(c("Y", "Y", NA, "No", "U", "UNK", "N"), words)
+#' match_vec(c("Y", "Y", NA, "No", "U", "UNK", "N"), words)
 #'
 #' @importFrom forcats fct_recode fct_explicit_na fct_relevel
 #' @importFrom rlang "!!!"
 
-match_me <- function(x = character(), matchstick = data.frame(),
+match_vec <- function(x = character(), dictionary = data.frame(),
                            from = 1, to = 2,
                            quiet = FALSE, warn_default = TRUE,
                            anchor_regex = TRUE) {
@@ -135,31 +135,31 @@ match_me <- function(x = character(), matchstick = data.frame(),
     x <- as.character(x)
   }
 
-  wl_is_data_frame  <- is.data.frame(matchstick)
+  wl_is_data_frame  <- is.data.frame(dictionary)
   
-  wl_is_rectangular <- (wl_is_data_frame || is.matrix(matchstick)) &&
-                        ncol(matchstick) >= 2
+  wl_is_rectangular <- (wl_is_data_frame || is.matrix(dictionary)) &&
+                        ncol(dictionary) >= 2
  
   if (!wl_is_rectangular) {
-    stop("matchstick must be a data frame with at least two columns")
+    stop("dictionary must be a data frame with at least two columns")
   } 
   
   if (!wl_is_data_frame) {
-    matchstick <- as.data.frame(matchstick, stringsAsFactors = FALSE)
+    dictionary <- as.data.frame(dictionary, stringsAsFactors = FALSE)
   }
 
-  from_exists <- i_check_scalar(from) && i_check_column_name(from, names(matchstick))
-  to_exists   <- i_check_scalar(to)   && i_check_column_name(to, names(matchstick))
+  from_exists <- i_check_scalar(from) && i_check_column_name(from, names(dictionary))
+  to_exists   <- i_check_scalar(to)   && i_check_column_name(to, names(dictionary))
 
   if (!from_exists || !to_exists) {
-    stop("`from` and `to` must refer to columns in the matchstick")
+    stop("`from` and `to` must refer to columns in the dictionary")
   }
 
-  keys   <- matchstick[[from]]
-  values <- matchstick[[to]]
+  keys   <- dictionary[[from]]
+  values <- dictionary[[to]]
 
   if (!is.atomic(keys) || !is.atomic(values)) {
-    stop("matchstick must have two columns coerceable to a character")
+    stop("dictionary must have two columns coerceable to a character")
   }
 
   keys   <- as.character(keys)
@@ -188,7 +188,7 @@ match_me <- function(x = character(), matchstick = data.frame(),
     no_keys   <- !any(x %in% keys, na.rm = TRUE) 
     no_values <- !any(x %in% values, na.rm = TRUE)
     the_x     <- deparse(the_call[["x"]])
-    the_words <- deparse(the_call[["matchstick"]])
+    the_words <- deparse(the_call[["dictionary"]])
 
     if (no_keys && no_values && no_regex) {
       msg <- "None of the variables in %s were found in %s. Did you use the correct dictionary?" 

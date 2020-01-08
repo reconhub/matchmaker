@@ -1,4 +1,4 @@
-context("match_us() tests")
+context("match_df() tests")
 
 
 corrections <- data.frame(
@@ -28,9 +28,9 @@ cleaned_data <- data.frame(
 
 test_that("a data frame is needed for the first part", {
 
-  expect_error(match_us(), "x must be a data frame")
-  expect_error(match_us(clist), "x must be a data frame")
-  expect_error(match_us(my_data_frame$raboof), "x must be a data frame")
+  expect_error(match_df(), "x must be a data frame")
+  expect_error(match_df(clist), "x must be a data frame")
+  expect_error(match_df(my_data_frame$raboof), "x must be a data frame")
 
 })
 
@@ -38,20 +38,20 @@ test_that("a data frame is needed for the first part", {
 
 test_that("a list of data frames is needed for the second part", {
 
-  expect_error(match_us(my_data_frame),
-               "matchbook must be a list of data frames")
-  expect_error(match_us(my_data_frame, list(1:10)),
-               "everything in matchbook must be a data frame")
-  expect_error(match_us(my_data_frame, c(clist, list(corrections))),
+  expect_error(match_df(my_data_frame),
+               "dictionary must be a list of data frames")
+  expect_error(match_df(my_data_frame, list(1:10)),
+               "everything in dictionary must be a data frame")
+  expect_error(match_df(my_data_frame, c(clist, list(corrections))),
                "all dictionaries must be named")
-  expect_warning(match_us(my_data_frame, c(clist, funkytime = list(corrections))),
+  expect_warning(match_df(my_data_frame, c(clist, funkytime = list(corrections))),
                  "funkytime")
   
 })
 
 test_that("columns can be specified for the data despite order", {
 
-  expect_identical(match_us(my_data_frame, corrections[sample(4)],
+  expect_identical(match_df(my_data_frame, corrections[sample(4)],
                             from = "bad", 
                             to = "good",
                             by = "column"
@@ -68,7 +68,7 @@ test_that("definitions with missing from, to, and order will be ignored", {
   cxn$junk <- sample(letters, 11)
   cxn$more_junk <- runif(11)
 
-  res <- match_us(mdf, cxn)
+  res <- match_df(mdf, cxn)
 
   expect_equal(res$x, 1:11)
   expect_equal(res$y, 1:11 > 5)
@@ -76,7 +76,7 @@ test_that("definitions with missing from, to, and order will be ignored", {
   # Example: y column is specified
   cxn[nrow(cxn), "column"] <- "y"
 
-  res <- match_us(mdf, cxn)
+  res <- match_df(mdf, cxn)
 
   expect_equal(res$x, 1:11)
   expect_equal(res$y, 1:11 > 5)
@@ -90,7 +90,7 @@ test_that("definitions with missing from, to, and order will be ignored", {
     junk      = "what",
     more_junk = pi
   )
-  res <- match_us(mdf, rbind(cxn, new_junk))
+  res <- match_df(mdf, rbind(cxn, new_junk))
 
   expect_equal(res$x, 1:11)
   expect_equal(res$y, 1:11 > 5)
@@ -100,19 +100,19 @@ test_that("definitions with missing from, to, and order will be ignored", {
 
 test_that("a single error will be thrown if the columns are not in the correct order", {
 
-  expect_error(match_us(my_data_frame, corrections,
+  expect_error(match_df(my_data_frame, corrections,
                                        from = "hello", to = "there"),
                "`from` and `to` must refer to columns in the dictionary")
-  expect_error(match_us(my_data_frame, corrections,
+  expect_error(match_df(my_data_frame, corrections,
                                        from = 0, to = 11),
                "`from` and `to` must refer to columns in the dictionary")
-  expect_error(match_us(my_data_frame, corrections,
+  expect_error(match_df(my_data_frame, corrections,
                                        from = 1, to = 11),
                "`from` and `to` must refer to columns in the dictionary")
-  expect_error(match_us(my_data_frame, corrections,
+  expect_error(match_df(my_data_frame, corrections,
                                        from = 6, to = "good"),
                "`from` and `to` must refer to columns in the dictionary")
-  expect_error(match_us(my_data_frame, corrections,
+  expect_error(match_df(my_data_frame, corrections,
                                        from = "bad", to = 99),
                "`from` and `to` must refer to columns in the dictionary")
 
@@ -120,7 +120,7 @@ test_that("a single error will be thrown if the columns are not in the correct o
 
 test_that("spelling cleaning works as expected", {
 
-  test_cleaned <- match_us(my_data_frame, clist)
+  test_cleaned <- match_df(my_data_frame, clist)
   expect_identical(test_cleaned$raboof, cleaned_data$raboof)
   # Uncomment if this is mis-behaving. <3, Zhian
   # print(fct_recode(my_data_frame$treatment, yes = "Yes", yes = "Y", no = "No", no = "N"))
@@ -141,7 +141,7 @@ test_that("default errors will be thrown", {
   )
   corr <- rbind(corrections, corr)
   wrn <- "raboof_____:.+?treatment__:.+?'check data'"
-  expect_warning(match_us(my_data_frame, corr, warn = TRUE), wrn)
+  expect_warning(match_df(my_data_frame, corr, warn = TRUE), wrn)
 
 })
 
@@ -153,7 +153,7 @@ test_that("errors will be captured and passed through; error'd cols are preserve
   corr <- corrections
   corr[12, ] <- c("Florida", "Flo Rida", "listcol", 1)
   err <- "listcol____:.+?x must be coerceable to a character"
-  expect_warning(lc <- match_us(with_list, corr, warn = TRUE), err)
+  expect_warning(lc <- match_df(with_list, corr, warn = TRUE), err)
   expect_length(lc, 4)
   expect_is(lc[[4]], "list")
   expect_named(lc, names(with_list))
@@ -165,14 +165,14 @@ test_that("errors will be captured and passed through; error'd cols are preserve
 test_that("sorting works as expected", {
 
   # sorting by data.frame 
-  test_sorted_df <- match_us(my_data_frame, 
+  test_sorted_df <- match_df(my_data_frame, 
                              corrections,
                              by = "column",
                              order = "orders"
   )
 
   # sorting by list
-  test_sorted_ls <- match_us(my_data_frame, 
+  test_sorted_ls <- match_df(my_data_frame, 
                              clist,
                              order = "orders"
   )
@@ -186,11 +186,11 @@ test_that("sorting works as expected", {
 test_that("global data frame works if by = NULL", { 
 
   expect_error({
-    global_test <- match_us(my_data_frame, corrections, by = 69)
+    global_test <- match_df(my_data_frame, corrections, by = 69)
   }, "`by` must be the name or position of a column in the dictionary")
 
   expect_warning({
-    global_test <- match_us(my_data_frame, corrections, by = NULL)
+    global_test <- match_df(my_data_frame, corrections, by = NULL)
   }, "Using dictionary globally across all character/factor columns.")
 
   resorted_trt <- forcats::fct_relevel(cleaned_data$treatment, "missing") 
@@ -202,7 +202,7 @@ test_that("global data frame works if by = NULL", {
 
 test_that("regex matching works as expected", { 
   
-  # create matchbook
+  # create dictionary
   d1 <- data.frame(val     = c("a", "b", "c"),
                    replace = c("alpha", "bravo", "charlie"),
                    var     = rep(".regex ^column_[[:digit:]]", 3),
@@ -224,16 +224,16 @@ test_that("regex matching works as expected", {
   )
   
   # clean
-  df_clean <- match_us(df, dict)
+  df_clean <- match_df(df, dict)
   
-  # column_[[:digit:]] cols matched by matchstick d1 (via .regex keyword)
+  # column_[[:digit:]] cols matched by dictionary d1 (via .regex keyword)
   expect_setequal(df_clean$column_1, d1$replace)
   expect_setequal(df_clean$column_2, d1$replace)
   
-  # my_column matched literally by matchstick d2
+  # my_column matched literally by dictionary d2
   expect_setequal(df_clean$my_column, d2$replace)
   
-  # column_xx not matched by matchstick, so unchanged
+  # column_xx not matched by dictionary, so unchanged
   expect_identical(df_clean$column_xx, df$column_xx)
   
   
@@ -245,6 +245,6 @@ test_that("regex matching works as expected", {
   
   dict <- rbind.data.frame(d1, d2, d3)
   
-  expect_warning(match_us(df, dict), "\\.regex capitalize")
+  expect_warning(match_df(df, dict), "\\.regex capitalize")
 })
 
