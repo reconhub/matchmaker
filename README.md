@@ -34,8 +34,8 @@ remotes::install_github("reconhub/matchmaker")
 The matchmaker package has two user-facing functions that perform
 dictionary-based cleaning:
 
-  - `match_me()` will translate the values in a single vector
-  - `match_us()` will translate values in all specified columns of a
+  - `match_vec()` will translate the values in a single vector
+  - `match_df()` will translate values in all specified columns of a
     data frame
 
 <!-- end list -->
@@ -94,8 +94,8 @@ head(dat) # show the data
 #> 5 40bc7a 2019-07-12           n       1        6         0          norm           unk          norm         <NA>        n
 #> 6 46566e 2019-07-14           y      NA        B        50           unk           unk           inc         <NA>     <NA>
 
-res1 <- match_us(dat,
-                 matchbook = dict,
+res1 <- match_df(dat,
+                 dictionary = dict,
                  from = "options",
                  to = "values",
                  by = "grp")
