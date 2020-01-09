@@ -194,13 +194,13 @@ match_df <- function(x = data.frame(), dictionary = list(), from = 1, to = 2,
       }
     }
     global_words <- dictionary[[".global"]]
-    dictionary    <- dictionary[names(dictionary) != ".global"]
+    dictionary   <- dictionary[names(dictionary) != ".global"]
     has_global   <- !is.null(global_words)
     
     # Identify columns of x to clean, and matching entry in dictionary ----------
     
     # Extract vars to check from dictionary (both plain and regex) ------------
-    vars_check <- names(dictionary)
+    vars_check   <- names(dictionary)
     is_var_regex <- grepl("^\\.regex[[:space:]]", vars_check)
     
     # If any .regex keys... ------------

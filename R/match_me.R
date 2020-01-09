@@ -193,7 +193,7 @@ match_vec <- function(x = character(), dictionary = data.frame(),
     if (no_keys && no_values && no_regex) {
       msg <- "None of the variables in %s were found in %s. Did you use the correct dictionary?" 
       msg <- sprintf(msg, the_x, the_words)
-      warning(msg)
+      warning(msg, call. = FALSE)
     }
 
     if (any(na_present)) {
@@ -202,13 +202,14 @@ match_vec <- function(x = character(), dictionary = data.frame(),
                    "If you want to indicate missing data, use the '.missing' keyword.", 
                    collapse = "\n")
       msg <- sprintf(msg, the_words)
-      warning(msg)
+      warning(msg, call. = FALSE)
     }
 
     if (length(dkeys) > 0) {
+      dkeys[is.na(dkeys)] <- ".missing"
       msg <- 'Duplicate keys were found in the `from` column of %s: "%s"\nonly the first instance will be used.'
       msg <- sprintf(msg, the_words, paste(dkeys, collapse = '", "'))
-      warning(msg)
+      warning(msg, call. = FALSE)
     }
   }
 
@@ -260,7 +261,7 @@ match_vec <- function(x = character(), dictionary = data.frame(),
     if (warn_default && length(default_vars) > 0) {
       was <- if (length(default_vars) > 1) "were" else "was"
       msg <- "'%s' %s changed to the default value ('%s')"
-      warning(sprintf(msg, paste(default_vars, collapse = "', '"), was, names(default)))
+      warning(sprintf(msg, paste(default_vars, collapse = "', '"), was, names(default)), call. = FALSE)
     }
     suppressWarnings({
       x <- forcats::fct_other(x, keep = c(names(dict), names(nas)), other = names(default))
