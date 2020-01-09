@@ -45,21 +45,24 @@ The matchmaker package has two user-facing functions that perform dictionary-bas
 
 ```{r example}
 library(matchmaker)
-dict     <- read.csv(matchmaker_example("spelling-dictionary.csv"), 
-                     stringsAsFactors = FALSE)
-dat      <- read.csv(matchmaker_example("coded-data.csv"), 
-                     stringsAsFactors = FALSE)
+dict <- read.csv(matchmaker_example("spelling-dictionary.csv"),
+  stringsAsFactors = FALSE
+)
+dat <- read.csv(matchmaker_example("coded-data.csv"),
+  stringsAsFactors = FALSE
+)
 dat$date <- as.Date(dat$date)
 #
-# Clean spelling based on dictionary ----------------------------- 
+# Clean spelling based on dictionary -----------------------------
 #
 dict # show the dict
 head(dat) # show the data
 
 res1 <- match_df(dat,
-                 dictionary = dict,
-                 from = "options",
-                 to = "values",
-                 by = "grp")
+  dictionary = dict,
+  from = "options",
+  to = "values",
+  by = "grp"
+)
 head(res1)
 ```

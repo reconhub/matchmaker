@@ -22,7 +22,7 @@ Description: The 'matchmaker' package provides flexible dictionary-based
 URL: https://repidemicsconsortium/matchmaker, https://github.com/reconhub/matchmaker
 License: GPL-3
 Suggests: 
-    testthat,
+    testthat (>= 2.1.0),
     covr
 Encoding: UTF-8
 LazyData: true
@@ -30,4 +30,5 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.0.2
 Imports: 
     rlang,
-    forcats
+    forcats,
+    cli

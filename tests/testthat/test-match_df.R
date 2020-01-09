@@ -1,6 +1,6 @@
 context("match_df() tests")
 
-
+{
 corrections <- data.frame(
   bad = c("foubar", "foobr", "fubar", ".missing", "unknown", "Yes", "Y", "No", "N", ".missing"),
   good = c("foobar", "foobar", "foobar", "missing", "missing", "yes", "yes", "no", "no", "missing"),
@@ -26,6 +26,7 @@ cleaned_data <- data.frame(
   ),
   region = state.name[1:11]
 )
+}
 
 
 test_that("a data frame is needed for the first part", {
@@ -148,15 +149,21 @@ test_that("spelling cleaning works as expected", {
 
 test_that("default errors will be thrown", {
   corr <- data.frame(
-    bad = c(".default", ".default"),
-    good = c("check data", "check data"),
-    column = c("raboof", "treatment"),
+    bad = c(".default", ".default", "kruh"),
+    good = c("check data", "check data", "hurk"),
+    column = c("raboof", "treatment", "raboof"),
     orders = Inf,
     stringsAsFactors = FALSE
   )
-  corr <- rbind(corrections, corr)
-  wrn <- "raboof_____:.+?treatment__:.+?'check data'"
-  expect_warning(match_df(my_data_frame, corr, warn = TRUE), wrn)
+  corr <- rbind(corrections, corr, corrections)
+  wrn1 <- "Duplicate keys"
+  wrn2 <- "'check data'"
+  wrn3 <- "raboof\\n  1"
+  wrn4 <- "treatment\\n  1"
+  expect_output(match_df(my_data_frame, corr, warn = TRUE), wrn1)
+  expect_output(match_df(my_data_frame, corr, warn = TRUE), wrn2)
+  expect_output(match_df(my_data_frame, corr, warn = TRUE), wrn3)
+  expect_output(match_df(my_data_frame, corr, warn = TRUE), wrn4)
 })
 
 
@@ -165,8 +172,8 @@ test_that("errors will be captured and passed through; error'd cols are preserve
   with_list$listcol <- as.list(with_list$region)
   corr <- corrections
   corr[12, ] <- c("Florida", "Flo Rida", "listcol", 1)
-  err <- "listcol____:.+?x must be coerceable to a character"
-  expect_warning(lc <- match_df(with_list, corr, warn = TRUE), err)
+  err <- "listcol.+?x must be coerceable to a character"
+  expect_output(lc <- match_df(with_list, corr, warn = TRUE), err)
   expect_length(lc, 4)
   expect_is(lc[[4]], "list")
   expect_named(lc, names(with_list))
@@ -216,7 +223,7 @@ test_that("global data frame works if by = NULL", {
   # global, with order ---------------------------------------------
   # The order specifies missing, no, yes
   resorted_trt <- forcats::fct_relevel(cleaned_data$treatment, "missing", "no")
-  expect_warning(
+  expect_output(
     {
       global_order_test <- match_df(my_data_frame, corrections, order = "orders", by = NULL, warn = TRUE)
     },
@@ -246,7 +253,7 @@ test_that("global data frame works if by = NULL", {
   cxns <- corrections
   cxns$column[6:10] <- ".global"
   cxns$orders[cxns$good == "missing"] <- Inf
-  expect_warning(
+  expect_output(
     {
       global_wrd_test <- match_df(my_data_frame, cxns, by = "column", order = "orders", warn = TRUE)
     },
