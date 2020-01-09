@@ -240,6 +240,33 @@ test_that("global data frame works if by = NULL", {
   )
   expect_identical(global_rev_test$raboof, resorted_foo)
   expect_identical(global_rev_test$treatment, resorted_trt)
+
+  # gobal dictionary with the .global keyword ---------------------
+  resorted_trt <- forcats::fct_relevel(cleaned_data$treatment, "no")
+  cxns <- corrections
+  cxns$column[6:10] <- ".global"
+  cxns$orders[cxns$good == "missing"] <- Inf
+  expect_warning(
+    {
+      global_wrd_test <- match_df(my_data_frame, cxns, by = "column", order = "orders", warn = TRUE)
+    },
+    "None of the variables in x[[i_x]] were found in g. Did you use the correct dictionary?",
+    fixed = TRUE  
+  )
+  expect_identical(global_wrd_test$raboof, cleaned_data$raboof)
+  expect_identical(global_wrd_test$treatment, resorted_trt)
+
+  # global dictionary with .global and .default throws ------------
+  cxns$bad[9] <- ".default" 
+  expect_error(
+    {
+      match_df(my_data_frame, cxns, by = "column", order = "orders", warn = TRUE)
+    },
+    "the .default keyword cannot be used with .global",
+    fixed = TRUE
+  )
+
+
 })
 
 
