@@ -1,0 +1,24 @@
+> match_df(with_list, corr, warn = TRUE)
+Message: 
+
+Message: ── [1m[1mErrors were found in the following columns[1m[22m ──
+
+Message: 
+
+Message: ● listcol
+
+Message:   1. [31m[3m[31mNA x must be coerceable to a character[31m[23m[39m
+
+    raboof treatment      region listcol
+1        a         e     Alabama       1
+2        b         d      Alaska       2
+3        c         c     Arizona       3
+4        d         b    Arkansas       4
+5        e         a  California       5
+6   foobar       yes    Colorado       6
+7   foobar       yes Connecticut       7
+8   foobar        no    Delaware       8
+9  missing   missing     Florida       9
+10 missing        no     Georgia      10
+11   fumar       yes      Hawaii      11
+

@@ -1,0 +1,40 @@
+> match_df(my_data_frame, corrections, order = "orders", by = NULL, warn = TRUE)
+Warning in match_df(my_data_frame, corrections, order = "orders", by = NULL, : Using dictionary globally across all character/factor columns.
+
+Message: 
+
+Message: ── [1m[1mWarnings were found in the following columns[1m[22m ──
+
+Message: 
+
+Message: ● raboof
+
+Message:   1. [33m[3m[33m! Duplicate keys were found in the `from` column of d: ".missing" only[0m
+    [3;33mthe first instance will be used.[33m[23m[39m
+
+Message: ● treatment
+
+Message:   1. [33m[3m[33m! Duplicate keys were found in the `from` column of d: ".missing" only[0m
+    [3;33mthe first instance will be used.[33m[23m[39m
+
+Message: ● region
+
+Message:   1. [33m[3m[33m! None of the variables in x[[i_x]] were found in d. Did you use the[0m
+    [3;33mcorrect dictionary?[33m[23m[39m
+
+Message:   2. [33m[3m[33m! Duplicate keys were found in the `from` column of d: ".missing" only[0m
+    [3;33mthe first instance will be used.[33m[23m[39m
+
+    raboof treatment      region
+1        a         e     Alabama
+2        b         d      Alaska
+3        c         c     Arizona
+4        d         b    Arkansas
+5        e         a  California
+6   foobar       yes    Colorado
+7   foobar       yes Connecticut
+8   foobar        no    Delaware
+9  missing   missing     Florida
+10 missing        no     Georgia
+11   fumar       yes      Hawaii
+

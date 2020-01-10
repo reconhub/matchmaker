@@ -1,0 +1,37 @@
+> match_df(my_data_frame, corr, warn = TRUE)
+Message: 
+
+Message: ── [1m[1mWarnings were found in the following columns[1m[22m ──
+
+Message: 
+
+Message: ● raboof
+
+Message:   1. [33m[3m[33m! Duplicate keys were found in the `from` column of d: "foubar",[0m
+    [3;33m"foobr", "fubar", ".missing", "unknown" only the first instance will be[0m
+    [3;33mused.[33m[23m[39m
+
+Message:   2. [33m[3m[33m! 'a', 'b', 'c', 'd', 'e', 'fumar' were changed to the default value[0m
+    [3;33m('check data')[33m[23m[39m
+
+Message: ● treatment
+
+Message:   1. [33m[3m[33m! Duplicate keys were found in the `from` column of d: "Yes", "Y", "No",[0m
+    [3;33m"N", ".missing" only the first instance will be used.[33m[23m[39m
+
+Message:   2. [33m[3m[33m! 'a', 'b', 'c', 'd', 'e' were changed to the default value ('check[0m
+    [3;33mdata')[33m[23m[39m
+
+       raboof  treatment      region
+1  check data check data     Alabama
+2  check data check data      Alaska
+3  check data check data     Arizona
+4  check data check data    Arkansas
+5  check data check data  California
+6      foobar        yes    Colorado
+7      foobar        yes Connecticut
+8      foobar         no    Delaware
+9     missing    missing     Florida
+10    missing         no     Georgia
+11 check data        yes      Hawaii
+
