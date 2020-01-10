@@ -14,8 +14,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-# matchmaker
-
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN status](https://www.r-pkg.org/badges/version/matchmaker)](https://CRAN.R-project.org/package=matchmaker)
@@ -24,42 +22,8 @@ knitr::opts_chunk$set(
 [![Codecov test coverage](https://codecov.io/gh/reconhub/matchmaker/branch/master/graph/badge.svg)](https://codecov.io/gh/reconhub/matchmaker?branch=master)
 <!-- badges: end -->
 
-The goal of matchmaker is to provide dictionary-based cleaning in a flexible manner.
-
-## Installation
-
-You can install the development version of matchmaker from GitHub with:
-
-``` r
-# install.packages("remotes")
-remotes::install_github("reconhub/matchmaker")
+```{r intro-hunk, child="man/rmdhunks/intro.Rmd"}
 ```
 
-## Example
-
-The matchmaker package has two user-facing functions that perform dictionary-based cleaning:
-
-
- - `match_vec()` will translate the values in a single vector
- - `match_df()` will translate values in all specified columns of a data frame 
-
-```{r example}
-library(matchmaker)
-dict     <- read.csv(matchmaker_example("spelling-dictionary.csv"), 
-                     stringsAsFactors = FALSE)
-dat      <- read.csv(matchmaker_example("coded-data.csv"), 
-                     stringsAsFactors = FALSE)
-dat$date <- as.Date(dat$date)
-#
-# Clean spelling based on dictionary ----------------------------- 
-#
-dict # show the dict
-head(dat) # show the data
-
-res1 <- match_df(dat,
-                 dictionary = dict,
-                 from = "options",
-                 to = "values",
-                 by = "grp")
-head(res1)
+```{r basic-example-hunk, child="man/rmdhunks/basic-example.Rmd"}
 ```

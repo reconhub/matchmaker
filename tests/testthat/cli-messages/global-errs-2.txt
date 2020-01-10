@@ -1,0 +1,40 @@
+> match_df(my_data_frame, cxns, order = "orders", by = NULL, warn = TRUE)
+Warning in match_df(my_data_frame, cxns, order = "orders", by = NULL, warn = TRUE): Using dictionary globally across all character/factor columns.
+
+Message: 
+
+Message: -- Warnings were found in the following columns --
+
+Message: 
+
+Message: ● raboof
+
+Message:   1. ! Duplicate keys were found in the `from` column of d: ".missing" only
+    the first instance will be used.
+
+Message: ● treatment
+
+Message:   1. ! Duplicate keys were found in the `from` column of d: ".missing" only
+    the first instance will be used.
+
+Message: ● region
+
+Message:   1. ! None of the variables in x[[i_x]] were found in d. Did you use the
+    correct dictionary?
+
+Message:   2. ! Duplicate keys were found in the `from` column of d: ".missing" only
+    the first instance will be used.
+
+    raboof treatment      region
+1        a         e     Alabama
+2        b         d      Alaska
+3        c         c     Arizona
+4        d         b    Arkansas
+5        e         a  California
+6   foobar       yes    Colorado
+7   foobar       yes Connecticut
+8   foobar        no    Delaware
+9  missing   missing     Florida
+10 missing        no     Georgia
+11   fumar       yes      Hawaii
+

@@ -16,29 +16,45 @@ withWarnings <- function(expr) {
 
 collect_ya_errs <- function(e, fmt) {
   if (is.null(e)) return(NULL)
-  warn <- vapply(e, "[[", character(1), "message")
-  warn <- paste0(" ", warn, collapse = "\n  ....")
-  paste(sprintf("  %s__:\n  ....%s", fmt, warn), collapse = "\n")
+  vapply(e, "[[", character(1), "message")
+  # warn <- paste0(" ", warn, collapse = "\n  ....")
+  # paste(sprintf("  %s__:\n  ....%s", fmt, warn), collapse = "\n")
 }
 
 process_werrors <- function(warns, errs) {
+  alertfun <- function(nm, wrn, color = "yellow") {
+    cols <- c("yellow" = cli::symbol$warning, "red" = cli::symbol$error)
+    sym  <- paste(cols[color], "")
+    cli::cli_li(nm)
+    dvid <- cli::cli_div(theme = list(span.emph = list(color = color, before = sym)))
+    ulid <- cli::cli_ol()
+    for (i in wrn[[nm]]){
+      cli::cli_li("{.emph {i}}")
+    }
+    cli::cli_end(ulid)
+    cli::cli_end(dvid)
+  }
   warns <- warns[lengths(warns) > 0]
   errs  <- errs[lengths(errs) > 0]
   warned <- length(warns) > 0
   errored <- length(errs) > 0
   if (warned || errored) {
   
-    wrn <- "" -> err
+    cli::cli_ul()
     if (warned) {
-      wngs <- do.call("paste", c(warns, sep = "\n"))
-      wrn <- sprintf("The following warnings were found...\n%s", wngs)
+      cli::cli_h2("Warnings were found in the following columns")
+      for (i in names(warns)) {
+        alertfun(i, warns)
+      }
     }
     if (errored) {
-      errs <- do.call("paste", c(errs, sep = "\n"))
-      err  <- sprintf("The following errors were found:\n%s", errs)
+      cli::cli_h2("Errors were found in the following columns")
+      for (i in names(errs)) {
+        alertfun(i, errs, "red")
+      }
     }
-    res <- sprintf("%s\n%s", wrn, err)
-    if (res == "\n") NULL else res
+    cli::cli_end()
+
   } else {
     NULL
   }

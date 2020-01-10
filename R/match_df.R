@@ -324,7 +324,6 @@ match_df <- function(x = data.frame(), dictionary = list(), from = 1, to = 2,
   # Process warnings and errors and give a warning if there were any
   if (warn) {
     wemsg <- process_werrors(warns, errs)
-    if (!is.null(wemsg)) warning(wemsg)
   }
 
   x

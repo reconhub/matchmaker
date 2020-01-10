@@ -1,0 +1,24 @@
+> match_df(with_list, corr, warn = TRUE)
+Message: 
+
+Message: -- Errors were found in the following columns --
+
+Message: 
+
+Message: ● listcol
+
+Message:   1. NA x must be coerceable to a character
+
+    raboof treatment      region listcol
+1        a         e     Alabama       1
+2        b         d      Alaska       2
+3        c         c     Arizona       3
+4        d         b    Arkansas       4
+5        e         a  California       5
+6   foobar       yes    Colorado       6
+7   foobar       yes Connecticut       7
+8   foobar        no    Delaware       8
+9  missing   missing     Florida       9
+10 missing        no     Georgia      10
+11   fumar       yes      Hawaii      11
+

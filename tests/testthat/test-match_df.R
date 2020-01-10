@@ -1,6 +1,6 @@
 context("match_df() tests")
 
-
+{
 corrections <- data.frame(
   bad = c("foubar", "foobr", "fubar", ".missing", "unknown", "Yes", "Y", "No", "N", ".missing"),
   good = c("foobar", "foobar", "foobar", "missing", "missing", "yes", "yes", "no", "no", "missing"),
@@ -26,6 +26,7 @@ cleaned_data <- data.frame(
   ),
   region = state.name[1:11]
 )
+}
 
 
 test_that("a data frame is needed for the first part", {
@@ -147,16 +148,24 @@ test_that("spelling cleaning works as expected", {
 })
 
 test_that("default errors will be thrown", {
+
   corr <- data.frame(
-    bad = c(".default", ".default"),
-    good = c("check data", "check data"),
-    column = c("raboof", "treatment"),
+    bad = c(".default", ".default", "kruh"),
+    good = c("check data", "check data", "hurk"),
+    column = c("raboof", "treatment", "raboof"),
     orders = Inf,
     stringsAsFactors = FALSE
   )
-  corr <- rbind(corrections, corr)
-  wrn <- "raboof_____:.+?treatment__:.+?'check data'"
-  expect_warning(match_df(my_data_frame, corr, warn = TRUE), wrn)
+  corr <- rbind(corrections, corr, corrections)
+  expect_message(match_df(my_data_frame, corr, warn = TRUE), "Duplicate keys")
+
+  skip_if(!cli::is_utf8_output())
+
+  verify_output(path = test_path("cli-messages", "default-errs-1.txt"),
+    match_df(my_data_frame, corr, warn = TRUE),
+    crayon = FALSE,
+    unicode = FALSE,
+  )
 })
 
 
@@ -165,12 +174,19 @@ test_that("errors will be captured and passed through; error'd cols are preserve
   with_list$listcol <- as.list(with_list$region)
   corr <- corrections
   corr[12, ] <- c("Florida", "Flo Rida", "listcol", 1)
-  err <- "listcol____:.+?x must be coerceable to a character"
-  expect_warning(lc <- match_df(with_list, corr, warn = TRUE), err)
+  lc <- match_df(with_list, corr, warn = FALSE)
   expect_length(lc, 4)
   expect_is(lc[[4]], "list")
   expect_named(lc, names(with_list))
   expect_identical(with_list[[4]], lc[[4]])
+
+  skip_if(!cli::is_utf8_output())
+
+  verify_output(path = test_path("cli-messages", "default-errs-2.txt"),
+    match_df(with_list, corr, warn = TRUE),
+    crayon = FALSE,
+    unicode = FALSE,
+  )
 })
 
 
@@ -212,20 +228,32 @@ test_that("global data frame works if by = NULL", {
   )
   expect_identical(global_test$raboof, cleaned_data$raboof)
   expect_identical(global_test$treatment, resorted_trt)
+})
 
+test_that("global dictionary works with order", {
   # global, with order ---------------------------------------------
   # The order specifies missing, no, yes
   resorted_trt <- forcats::fct_relevel(cleaned_data$treatment, "missing", "no")
   expect_warning(
     {
-      global_order_test <- match_df(my_data_frame, corrections, order = "orders", by = NULL, warn = TRUE)
+      global_order_test <- match_df(my_data_frame, corrections, order = "orders", by = NULL)
     },
-    'Duplicate keys were found in the `from` column of d: ".missing"',
+    "Using dictionary globally across all character/factor columns.",
     fixed = TRUE
   )
   expect_identical(global_order_test$raboof, cleaned_data$raboof)
   expect_identical(global_order_test$treatment, resorted_trt)
 
+  skip_if(!cli::is_utf8_output())
+
+  verify_output(path = test_path("cli-messages", "global-errs-1.txt"),
+    match_df(my_data_frame, corrections, order = "orders", by = NULL, warn = TRUE),
+    crayon = FALSE,
+    unicode = FALSE,
+  )
+})
+
+test_that("global dictionary works with a reverse order", {
   # global, reverse order ------------------------------------------
   cxns <- corrections
   cxns$orders <- c(5:1, 1:5)
@@ -241,23 +269,27 @@ test_that("global data frame works if by = NULL", {
   expect_identical(global_rev_test$raboof, resorted_foo)
   expect_identical(global_rev_test$treatment, resorted_trt)
 
+  skip_if(!cli::is_utf8_output())
+
+  verify_output(path = test_path("cli-messages", "global-errs-2.txt"),
+    match_df(my_data_frame, cxns, order = "orders", by = NULL, warn = TRUE),
+    crayon = FALSE,
+    unicode = FALSE,
+  )
+})
+
+test_that("global dictionary works with the .global keyword", {
   # gobal dictionary with the .global keyword ---------------------
   resorted_trt <- forcats::fct_relevel(cleaned_data$treatment, "no")
   cxns <- corrections
   cxns$column[6:10] <- ".global"
   cxns$orders[cxns$good == "missing"] <- Inf
-  expect_warning(
-    {
-      global_wrd_test <- match_df(my_data_frame, cxns, by = "column", order = "orders", warn = TRUE)
-    },
-    "None of the variables in x[[i_x]] were found in g. Did you use the correct dictionary?",
-    fixed = TRUE  
-  )
+  global_wrd_test <- match_df(my_data_frame, cxns, by = "column", order = "orders")
   expect_identical(global_wrd_test$raboof, cleaned_data$raboof)
   expect_identical(global_wrd_test$treatment, resorted_trt)
 
   # global dictionary with .global and .default throws ------------
-  cxns$bad[9] <- ".default" 
+  cxns$bad[9] <- ".default"
   expect_error(
     {
       match_df(my_data_frame, cxns, by = "column", order = "orders", warn = TRUE)
@@ -265,8 +297,6 @@ test_that("global data frame works if by = NULL", {
     "the .default keyword cannot be used with .global",
     fixed = TRUE
   )
-
-
 })
 
 

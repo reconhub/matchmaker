@@ -1,0 +1,41 @@
+
+## Example
+
+The matchmaker package has two user-facing functions that perform dictionary-based cleaning:
+
+
+ - `match_vec()` will translate the values in a single vector
+ - `match_df()` will translate values in all specified columns of a data frame 
+ 
+Mostly, users will be working with `match_df()` to transform values across
+specific columns. This is what a typical workflow would look like:
+
+```{r setup}
+library("matchmaker")
+
+# Read in data set
+dat <- read.csv(matchmaker_example("coded-data.csv"),
+  stringsAsFactors = FALSE
+)
+dat$date <- as.Date(dat$date)
+
+# Read in dictionary
+dict <- read.csv(matchmaker_example("spelling-dictionary.csv"),
+  stringsAsFactors = FALSE
+)
+```
+
+```{r example}
+# Clean spelling based on dictionary -----------------------------
+
+dict # show the dict
+head(dat) # show the data
+
+cleaned <- match_df(dat,
+  dictionary = dict,
+  from = "options",
+  to = "values",
+  by = "grp"
+)
+head(cleaned)
+```

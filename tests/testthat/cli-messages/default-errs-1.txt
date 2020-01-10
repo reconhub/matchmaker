@@ -1,0 +1,37 @@
+> match_df(my_data_frame, corr, warn = TRUE)
+Message: 
+
+Message: -- Warnings were found in the following columns --
+
+Message: 
+
+Message: ● raboof
+
+Message:   1. ! Duplicate keys were found in the `from` column of d: "foubar",
+    "foobr", "fubar", ".missing", "unknown" only the first instance will be
+    used.
+
+Message:   2. ! 'a', 'b', 'c', 'd', 'e', 'fumar' were changed to the default value
+    ('check data')
+
+Message: ● treatment
+
+Message:   1. ! Duplicate keys were found in the `from` column of d: "Yes", "Y", "No",
+    "N", ".missing" only the first instance will be used.
+
+Message:   2. ! 'a', 'b', 'c', 'd', 'e' were changed to the default value ('check
+    data')
+
+       raboof  treatment      region
+1  check data check data     Alabama
+2  check data check data      Alaska
+3  check data check data     Arizona
+4  check data check data    Arkansas
+5  check data check data  California
+6      foobar        yes    Colorado
+7      foobar        yes Connecticut
+8      foobar         no    Delaware
+9     missing    missing     Florida
+10    missing         no     Georgia
+11 check data        yes      Hawaii
+

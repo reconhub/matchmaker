@@ -1,0 +1,104 @@
+# Special Keywords
+
+## Keys (`from` column)
+
+The `from` column of the dictionary will contain the keys that you want to match
+in your current data set. These are expected to match exactly with the exception
+of three reserved keywords that start with a full stop:
+
+ - `.regex [pattern]`: will replace anything matching [pattern]. This is executed
+before any other replacements are made. The [pattern] should be an unquoted,
+valid, PERL-flavored regular expression. Any whitespace padding the regular
+expression is discarded.
+ - `.missing`: replaces any blank cells or `NA` values.
+ - `.default`: replaces ALL values that are not defined in the dictionary and 
+are not missing.
+
+> \* Any `NA` values in the keys will be interpreted as "NA" because it's a
+> common mistake to import the value "NA" to missing in R. If you intend for
+> `NA` to indicate missing data, replace it with:
+> `dictionary[[1]][is.na(dictionary[[1]]] <- ".missing"`
+
+## Values (`to` column)
+
+The values will replace their respective keys exactly as they are presented with
+one exception. There is currently one recognised keyword that can be placed in
+the to column of your dictionary:
+
+ - `.na`: Replace keys with missing data. When used in combination with the
+ `.missing` keyword (in column 1), it can allow you to differentiate between
+ explicit and implicit missing data.
+
+## Keyword demonstration
+
+For example, let's say you have the following data set of people asked if they
+like ice cream:
+
+```{r keys-example}
+who <- c("Anakin", "Darth", "R2-D2", "Leia", "C-3PO", "Rey", "Obi-Wan", "Luke", "Chewy", "Owen", "Lando")
+icecream <- c(letters[1:3], "NO", "N", "yes", "Y", "n", "n", NA, "")
+names(icecream) <- who
+icecream
+```
+
+### Missing data and default values
+
+You could contstruct a dictionary that has a 1:1 relationship between the keys
+that looks like this: 
+
+```{r mydict-1, echo = FALSE, results = 'asis'}
+my_dict1 <- data.frame(
+  keys = c("yes", "Y", "n", "N", "NO", ".missing", ".default"),
+  values = c("Yes", "Yes", "No", "No", "No", ".na", "(invalid)"),
+  stringsAsFactors = FALSE
+)
+knitr::kable(my_dict1, caption = "my_dict1")
+```
+
+
+Once you read in the file (either via `read.csv()` or `readxl::read_excel()` if 
+you use excel), you can use it as a dictionary. This dictionary will do three
+things:
+
+1. convert iterations of yes/no into Yes and No
+2. convert blank or `NA` values to explicit missing data.
+3. convert all other values to "(invalid)"
+
+
+```{r key-value-change}
+match_vec(icecream, dictionary = my_dict1, from = "keys", to = "values")
+```
+
+### Fuzzy matching
+
+Now we have nice, predictable values, but let's say Luke really didn't like
+ice cream. If he responded "NOOOOOOO" instead of "n", then the dictionary we
+specified would convert it to "(invalid)":
+
+```{r luke-no-like}
+icecream["Luke"] <- "NOOOOOOO"
+match_vec(icecream, dictionary = my_dict1, from = "keys", to = "values")
+```
+
+We can fix this if we use pattern matching. Here we are selecting from any valid
+spelling of yes/no with trailing letters so that it capture's Luke's extreme
+objection to ice cream. To do this we add the `.regex ` prefix (note the space
+after `.regex`):
+
+```{r mydict-2, echo = FALSE, results = 'asis'}
+my_dict2 <- data.frame(
+  keys = c(".regex \\^[Yy][Ee]?[Ss]*$", ".regex \\^[Nn][Oo]*$", ".missing", ".default"),
+  values = c("Yes", "No", ".na", "(invalid)"),
+  stringsAsFactors = FALSE
+)
+
+knitr::kable(my_dict2, caption = "my_dict2", escape = TRUE)
+my_dict2$keys <- c(".regex ^[Yy][Ee]?[Ss]*$", ".regex ^[Nn][Oo]*$", ".missing", ".default")
+```
+
+```{r luke-match}
+match_vec(icecream, dictionary = my_dict2, from = "keys", to = "values")
+```
+
+The drawback to fuzzy matching is that it will convert things that match the
+pattern, so be very careful when constructing your keys.

@@ -42,3 +42,4 @@ vignettes/*.pdf
 .*.swp$ # vim
 *~$     # emacs
 
+inst/doc
