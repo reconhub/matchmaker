@@ -45,18 +45,26 @@ dictionary-based cleaning:
   - `match_df()` will translate values in all specified columns of a
     data frame
 
-<!-- end list -->
+Mostly, users will be working with `match_df()` to transform values
+across specific columns. This is what a typical workflow would look
+like:
 
 ``` r
-library(matchmaker)
-dict <- read.csv(matchmaker_example("spelling-dictionary.csv"),
-  stringsAsFactors = FALSE
-)
+library("matchmaker")
+
+# Read in data set
 dat <- read.csv(matchmaker_example("coded-data.csv"),
   stringsAsFactors = FALSE
 )
 dat$date <- as.Date(dat$date)
 
+# Read in dictionary
+dict <- read.csv(matchmaker_example("spelling-dictionary.csv"),
+  stringsAsFactors = FALSE
+)
+```
+
+``` r
 # Clean spelling based on dictionary -----------------------------
 
 dict # show the dict

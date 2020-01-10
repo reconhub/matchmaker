@@ -132,7 +132,9 @@ match_vec <- function(x = character(), dictionary = data.frame(),
   if (length(x) == 0 || !is.atomic(x)) {
     stop("x must be coerceable to a character")
   } else if (!is.factor(x)) {
-    x <- setNames(as.character(x), names(x))
+    nx <- names(x)
+    x  <- as.character(x)
+    names(x) <- nx
   }
 
   wl_is_data_frame  <- is.data.frame(dictionary)
@@ -272,7 +274,9 @@ match_vec <- function(x = character(), dictionary = data.frame(),
   if (x_is_factor) {
     suppressWarnings(x <- forcats::fct_relevel(x, unique(values)))
   } else {
-    x <- setNames(as.character(x), names(x))
+    nx <- names(x)
+    x  <- as.character(x)
+    names(x) <- nx
   }
 
   x

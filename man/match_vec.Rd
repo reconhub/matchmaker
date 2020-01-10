@@ -87,7 +87,7 @@ to target missing data with your dictionary, use the \code{.missing} keyword. Th
 \examples{
 
 corrections <- data.frame(
-  bad = c("foubar", "foobr", "fubar", "unknown", ".missing"), 
+  bad = c("foubar", "foobr", "fubar", "unknown", ".missing"),
   good = c("foobar", "foobar", "foobar", ".na", "missing"),
   stringsAsFactors = FALSE
 )
@@ -101,7 +101,7 @@ match_vec(my_data, corrections)
 
 # You can use regular expressions to simplify your list
 corrections <- data.frame(
-  bad =  c(".regex f[ou][^m].+?r$", "unknown", ".missing"), 
+  bad =  c(".regex f[ou][^m].+?r$", "unknown", ".missing"),
   good = c("foobar",                ".na",     "missing"),
   stringsAsFactors = FALSE
 )
@@ -123,9 +123,9 @@ match_vec(letters, corrections)
 # The can be used for translating survey output
 
 words <- data.frame(
-  option_code = c(".regex ^[yY][eE]?[sS]?", 
-                  ".regex ^[nN][oO]?", 
-                  ".regex ^[uU][nN]?[kK]?", 
+  option_code = c(".regex ^[yY][eE]?[sS]?",
+                  ".regex ^[nN][oO]?",
+                  ".regex ^[uU][nN]?[kK]?",
                   ".missing"),
   option_name = c("Yes", "No", ".na", "Missing"),
   stringsAsFactors = FALSE
