@@ -1,13 +1,13 @@
 > match_df(with_list, corr, warn = TRUE)
 Message: 
 
-Message: ── [1m[1mErrors were found in the following columns[1m[22m ──
+Message: -- Errors were found in the following columns --
 
 Message: 
 
 Message: ● listcol
 
-Message:   1. [31m[3m[31mNA x must be coerceable to a character[31m[23m[39m
+Message:   1. NA x must be coerceable to a character
 
     raboof treatment      region listcol
 1        a         e     Alabama       1

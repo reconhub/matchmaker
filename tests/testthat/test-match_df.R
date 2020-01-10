@@ -163,8 +163,8 @@ test_that("default errors will be thrown", {
 
   verify_output(path = test_path("cli-messages", "default-errs-1.txt"),
     match_df(my_data_frame, corr, warn = TRUE),
-    crayon = TRUE,
-    unicode = TRUE,
+    crayon = FALSE,
+    unicode = FALSE,
   )
 })
 
@@ -184,8 +184,8 @@ test_that("errors will be captured and passed through; error'd cols are preserve
 
   verify_output(path = test_path("cli-messages", "default-errs-2.txt"),
     match_df(with_list, corr, warn = TRUE),
-    crayon = TRUE,
-    unicode = TRUE,
+    crayon = FALSE,
+    unicode = FALSE,
   )
 })
 
@@ -248,8 +248,8 @@ test_that("global dictionary works with order", {
 
   verify_output(path = test_path("cli-messages", "global-errs-1.txt"),
     match_df(my_data_frame, corrections, order = "orders", by = NULL, warn = TRUE),
-    crayon = TRUE,
-    unicode = TRUE,
+    crayon = FALSE,
+    unicode = FALSE,
   )
 })
 
@@ -273,8 +273,8 @@ test_that("global dictionary works with a reverse order", {
 
   verify_output(path = test_path("cli-messages", "global-errs-2.txt"),
     match_df(my_data_frame, cxns, order = "orders", by = NULL, warn = TRUE),
-    crayon = TRUE,
-    unicode = TRUE,
+    crayon = FALSE,
+    unicode = FALSE,
   )
 })
 

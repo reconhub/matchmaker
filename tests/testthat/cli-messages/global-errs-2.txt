@@ -3,27 +3,27 @@ Warning in match_df(my_data_frame, cxns, order = "orders", by = NULL, warn = TRU
 
 Message: 
 
-Message: ── [1m[1mWarnings were found in the following columns[1m[22m ──
+Message: -- Warnings were found in the following columns --
 
 Message: 
 
 Message: ● raboof
 
-Message:   1. [33m[3m[33m! Duplicate keys were found in the `from` column of d: ".missing" only[0m
-    [3;33mthe first instance will be used.[33m[23m[39m
+Message:   1. ! Duplicate keys were found in the `from` column of d: ".missing" only
+    the first instance will be used.
 
 Message: ● treatment
 
-Message:   1. [33m[3m[33m! Duplicate keys were found in the `from` column of d: ".missing" only[0m
-    [3;33mthe first instance will be used.[33m[23m[39m
+Message:   1. ! Duplicate keys were found in the `from` column of d: ".missing" only
+    the first instance will be used.
 
 Message: ● region
 
-Message:   1. [33m[3m[33m! None of the variables in x[[i_x]] were found in d. Did you use the[0m
-    [3;33mcorrect dictionary?[33m[23m[39m
+Message:   1. ! None of the variables in x[[i_x]] were found in d. Did you use the
+    correct dictionary?
 
-Message:   2. [33m[3m[33m! Duplicate keys were found in the `from` column of d: ".missing" only[0m
-    [3;33mthe first instance will be used.[33m[23m[39m
+Message:   2. ! Duplicate keys were found in the `from` column of d: ".missing" only
+    the first instance will be used.
 
     raboof treatment      region
 1        a         e     Alabama
