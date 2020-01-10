@@ -52,7 +52,7 @@ my_dict1 <- data.frame(
   values = c("Yes", "Yes", "No", "No", "No", ".na", "(invalid)"),
   stringsAsFactors = FALSE
 )
-knitr::kable(my_dict1, caption = "mydict1")
+knitr::kable(my_dict1, caption = "my_dict1")
 ```
 
 
@@ -87,11 +87,13 @@ after `.regex`):
 
 ```{r mydict-2, echo = FALSE, results = 'asis'}
 my_dict2 <- data.frame(
-  keys = c(".regex ^[Yy][Ee]?[Ss]*$", ".regex ^[Nn][Oo]*$", ".missing", ".default"),
+  keys = c(".regex \\^[Yy][Ee]?[Ss]*$", ".regex \\^[Nn][Oo]*$", ".missing", ".default"),
   values = c("Yes", "No", ".na", "(invalid)"),
   stringsAsFactors = FALSE
 )
-knitr::kable(my_dict2, caption = "mydict2")
+
+knitr::kable(my_dict2, caption = "my_dict2", escape = TRUE)
+my_dict2$keys <- c(".regex ^[Yy][Ee]?[Ss]*$", ".regex ^[Nn][Oo]*$", ".missing", ".default")
 ```
 
 ```{r luke-match}
