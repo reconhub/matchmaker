@@ -264,7 +264,7 @@ match_vec <- function(x = character(), dictionary = data.frame(),
       warning(sprintf(msg, paste(default_vars, collapse = "', '"), was, names(default)), call. = FALSE)
     }
     suppressWarnings({
-      x <- forcats::fct_other(x, keep = c(names(dict), names(nas)), other = names(default))
+      x <- forcats::fct_other(x, keep = c(names(dict), names(nas)), other_level = names(default))
     })
   }
 
