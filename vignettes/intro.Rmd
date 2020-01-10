@@ -1,0 +1,25 @@
+---
+title: "Introduction to matchmaker"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to matchmaker}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+```{r intro-hunk, child="../man/rmdhunks/intro.Rmd"}
+```
+
+```{r basic-example-hunk, child="../man/rmdhunks/basic-example.Rmd"}
+```
+
+```{r keywords-hunk, child="../man/rmdhunks/keywords.Rmd"}
+```

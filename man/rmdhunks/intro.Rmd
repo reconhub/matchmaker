@@ -1,0 +1,18 @@
+
+The goal of matchmaker is to provide dictionary-based cleaning for R users in a
+simple and intuitive manner built on the {forcats} package. Some of the features
+of this package include:
+
+ - preservation of factor orders
+ - ability to specify explicit and implicit missing values
+ - option to replace by fuzzy matching (regular expressions, anchored by default)
+ - optional variable selection by fuzzy matching
+
+## Installation
+
+You can install the development version of matchmaker from GitHub with:
+
+``` r
+# install.packages("remotes")
+remotes::install_github("reconhub/matchmaker")
+```
