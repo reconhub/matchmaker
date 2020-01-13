@@ -25,7 +25,8 @@ keywords for the columns:
 
 ## Matching columns with `.regex`
 
-> `r cli::cli_alert_warning("Before you use regex, you should be aware of three special symbols that will help anchor your words and prevent any unintended matching.")`
+> Before you use regex, you should be aware of three special symbols that will
+> help anchor your words and prevent any unintended matching.
 
 1. The carrot (`^`) **should be placed at the beginning of a pattern** to show
    that it's the beginning of the word. For example, `lab` will match both

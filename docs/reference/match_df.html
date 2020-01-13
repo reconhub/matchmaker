@@ -311,6 +311,37 @@ all character/factor columns indiscriminantly, then setting
 #&gt; 4  Inconclusive       unknown          yes      yes
 #&gt; 5       unknown        Normal      missing       no
 #&gt; 6       unknown  Inconclusive      missing  missing</div><div class='input'>
+<span class='co'># Show warnings/errors from each column --------------------------</span>
+<span class='co'># Internally, the `match_vec()` function can be quite noisy with warnings for</span>
+<span class='co'># various reasons. Thus, by default, the `match_df()` function will keep</span>
+<span class='co'># these quiet, but you can have them printed to your console if you use the</span>
+<span class='co'># warn = TRUE option:</span>
+
+<span class='no'>res1</span> <span class='kw'>&lt;-</span> <span class='fu'>match_df</span>(<span class='no'>dat</span>,
+                 <span class='kw'>dictionary</span> <span class='kw'>=</span> <span class='no'>dict</span>,
+                 <span class='kw'>from</span> <span class='kw'>=</span> <span class='st'>"options"</span>,
+                 <span class='kw'>to</span> <span class='kw'>=</span> <span class='st'>"values"</span>,
+                 <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"grp"</span>,
+                 <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── <span style='font-weight: bold;'>Warnings were found in the following columns</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>● age_group</span></div><div class='output co'>#&gt; <span class='message'>  1. </span><span style='color: #BBBB00;font-style: italic;'>⚠ None of the variables in </span><span style='color: #000000;background-color: #BBBBBB;font-style: italic;'>`age_group`</span><span style='color: #BBBB00;font-style: italic;'> were found in the global</span><span></span>
+#&gt; <span class='message'>    </span><span style='color: #BBBB00;font-style: italic;'>dictionary. Did you use the correct dictionary?</span><span></span></div><div class='output co'>#&gt; <span class='message'>● facility</span></div><div class='output co'>#&gt; <span class='message'>  1. </span><span style='color: #BBBB00;font-style: italic;'>⚠ None of the variables in </span><span style='color: #000000;background-color: #BBBBBB;font-style: italic;'>`facility`</span><span style='color: #BBBB00;font-style: italic;'> were found in the global</span><span></span>
+#&gt; <span class='message'>    </span><span style='color: #BBBB00;font-style: italic;'>dictionary. Did you use the correct dictionary?</span><span></span></div><div class='output co'>#&gt; <span class='message'>  2. </span><span style='color: #BBBB00;font-style: italic;'>⚠ 'A', 'B', 'C' were changed to the default value ('Unknown')</span><span></span></div><div class='output co'>#&gt; <span class='message'>● readmission</span></div><div class='output co'>#&gt; <span class='message'>  1. </span><span style='color: #BBBB00;font-style: italic;'>⚠ None of the variables in </span><span style='color: #000000;background-color: #BBBBBB;font-style: italic;'>`readmission`</span><span style='color: #BBBB00;font-style: italic;'> were found in the global</span><span></span>
+#&gt; <span class='message'>    </span><span style='color: #BBBB00;font-style: italic;'>dictionary. Did you use the correct dictionary?</span><span></span></div><div class='output co'>#&gt; <span class='message'>● treated</span></div><div class='output co'>#&gt; <span class='message'>  1. </span><span style='color: #BBBB00;font-style: italic;'>⚠ None of the variables in </span><span style='color: #000000;background-color: #BBBBBB;font-style: italic;'>`treated`</span><span style='color: #BBBB00;font-style: italic;'> were found in the global</span><span></span>
+#&gt; <span class='message'>    </span><span style='color: #BBBB00;font-style: italic;'>dictionary. Did you use the correct dictionary?</span><span></span></div><div class='output co'>#&gt; <span class='message'>● id</span></div><div class='output co'>#&gt; <span class='message'>  1. </span><span style='color: #BBBB00;font-style: italic;'>⚠ None of the variables in </span><span style='color: #000000;background-color: #BBBBBB;font-style: italic;'>`id`</span><span style='color: #BBBB00;font-style: italic;'> were found in </span><span style='color: #000000;background-color: #BBBBBB;font-style: italic;'>`dict`</span><span style='color: #BBBB00;font-style: italic;'>. Did you use the</span><span></span>
+#&gt; <span class='message'>    </span><span style='color: #BBBB00;font-style: italic;'>correct dictionary?</span><span></span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>res1</span>)</div><div class='output co'>#&gt;       id       date readmission treated    facility age_group lab_result_01
+#&gt; 1 ef267c 2019-07-08     Missing     Yes     Unknown     10-19       unknown
+#&gt; 2 e80a37 2019-07-07         Yes     Yes Facility  3     10-19  Inconclusive
+#&gt; 3 b72883 2019-07-07         Yes      No Facility  8     30-39  Inconclusive
+#&gt; 4 c9ee86 2019-07-09          No      No Facility  4     40-49  Inconclusive
+#&gt; 5 40bc7a 2019-07-12          No      No Facility  6       0-9        Normal
+#&gt; 6 46566e 2019-07-14         Yes Missing     Unknown       50+       unknown
+#&gt;   lab_result_02 lab_result_03 has_symptoms followup
+#&gt; 1          High  Inconclusive      missing  unknown
+#&gt; 2       unknown        Normal          yes      yes
+#&gt; 3        Normal  Inconclusive      missing      yes
+#&gt; 4  Inconclusive       unknown          yes      yes
+#&gt; 5       unknown        Normal      missing       no
+#&gt; 6       unknown  Inconclusive      missing  missing</div><div class='input'>
+
 <span class='co'># You can ensure the order of the factors are correct by specifying </span>
 <span class='co'># a column that defines order.</span>
 
@@ -424,7 +455,7 @@ all character/factor columns indiscriminantly, then setting
 #&gt; [1] unknown yes     yes     yes     no      missing
 #&gt; Levels: yes no unknown missing
 #&gt; </div><div class='input'>
-</div></pre>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

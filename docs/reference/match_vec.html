@@ -249,9 +249,9 @@ multiple variables in a data frame.</p></div>
 <span class='no'>my_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>5</span>], <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='no'>corrections</span>$<span class='no'>bad</span>[-<span class='fl'>5</span>], <span class='fl'>10</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))
 <span class='no'>my_data</span>[<span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>6</span>:<span class='fl'>15</span>, <span class='fl'>2</span>)] <span class='kw'>&lt;-</span> <span class='fl'>NA</span>  <span class='co'># with missing elements</span>
 
-<span class='fu'>match_vec</span>(<span class='no'>my_data</span>, <span class='no'>corrections</span>)</div><div class='output co'>#&gt;  [1] "a"       "b"       "c"       "d"       "e"       "foobar"  "foobar" 
-#&gt;  [8] NA        "foobar"  "foobar"  "missing" "foobar"  "foobar"  "missing"
-#&gt; [15] NA       </div><div class='input'>
+<span class='fu'>match_vec</span>(<span class='no'>my_data</span>, <span class='no'>corrections</span>)</div><div class='output co'>#&gt;  [1] "a"       "b"       "c"       "d"       "e"       "foobar"  "missing"
+#&gt;  [8] NA        "foobar"  NA        "foobar"  "foobar"  NA        "foobar" 
+#&gt; [15] "missing"</div><div class='input'>
 <span class='co'># You can use regular expressions to simplify your list</span>
 <span class='no'>corrections</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
   <span class='kw'>bad</span> <span class='kw'>=</span>  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>".regex f[ou][^m].+?r$"</span>, <span class='st'>"unknown"</span>, <span class='st'>".missing"</span>),
@@ -267,13 +267,13 @@ multiple variables in a data frame.</p></div>
 #&gt; 3              .missing missing
 #&gt; 4              .default unknown</div><div class='input'>
 <span class='co'># a warning will be issued about the data that were converted</span>
-<span class='fu'>match_vec</span>(<span class='no'>my_data</span>, <span class='no'>corrections_with_default</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: 'a', 'b', 'c', 'd', 'e' were changed to the default value ('unknown')</span></div><div class='output co'>#&gt;  [1] "unknown" "unknown" "unknown" "unknown" "unknown" "foobar"  "foobar" 
-#&gt;  [8] NA        "foobar"  "foobar"  "missing" "foobar"  "foobar"  "missing"
-#&gt; [15] NA       </div><div class='input'>
+<span class='fu'>match_vec</span>(<span class='no'>my_data</span>, <span class='no'>corrections_with_default</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: 'a', 'b', 'c', 'd', 'e' were changed to the default value ('unknown')</span></div><div class='output co'>#&gt;  [1] "unknown" "unknown" "unknown" "unknown" "unknown" "foobar"  "missing"
+#&gt;  [8] NA        "foobar"  NA        "foobar"  "foobar"  NA        "foobar" 
+#&gt; [15] "missing"</div><div class='input'>
 <span class='co'># use the warn_default = FALSE, if you are absolutely sure you don't want it.</span>
-<span class='fu'>match_vec</span>(<span class='no'>my_data</span>, <span class='no'>corrections_with_default</span>, <span class='kw'>warn_default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;  [1] "unknown" "unknown" "unknown" "unknown" "unknown" "foobar"  "foobar" 
-#&gt;  [8] NA        "foobar"  "foobar"  "missing" "foobar"  "foobar"  "missing"
-#&gt; [15] NA       </div><div class='input'>
+<span class='fu'>match_vec</span>(<span class='no'>my_data</span>, <span class='no'>corrections_with_default</span>, <span class='kw'>warn_default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;  [1] "unknown" "unknown" "unknown" "unknown" "unknown" "foobar"  "missing"
+#&gt;  [8] NA        "foobar"  NA        "foobar"  "foobar"  NA        "foobar" 
+#&gt; [15] "missing"</div><div class='input'>
 <span class='co'># The function will give you a warning if the dictionary does not</span>
 <span class='co'># match the data</span>
 <span class='fu'>match_vec</span>(<span class='no'>letters</span>, <span class='no'>corrections</span>)</div><div class='output co'>#&gt;  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s"

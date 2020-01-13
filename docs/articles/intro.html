@@ -92,7 +92,7 @@
 
     
     
-<p>The goal of matchmaker is to provide dictionary-based cleaning for R users in a simple and intuitive manner built on the {forcats} package. Some of the features of this package include:</p>
+<p>The goal of {matchmaker} is to provide dictionary-based cleaning for R users in a simple and intuitive manner built on the <a href="https://forcats.tidyverse.org">{forcats}</a> package. Some of the features of this package include:</p>
 <ul>
 <li>preservation of factor orders</li>
 <li>ability to specify explicit and implicit missing values</li>
@@ -102,9 +102,8 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the development version of matchmaker from GitHub with:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># install.packages("remotes")</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">remotes<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/remotes/man/install_github.html">install_github</a></span>(<span class="st">"reconhub/matchmaker"</span>)</a></code></pre></div>
+<p>You can install {matchmaker} from CRAN:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"matchmaker"</span>)</a></code></pre></div>
 </div>
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
@@ -116,7 +115,23 @@
 <li>
 <code><a href="../reference/match_df.html">match_df()</a></code> will translate values in all specified columns of a data frame</li>
 </ul>
-<p>Mostly, users will be working with <code><a href="../reference/match_df.html">match_df()</a></code> to transform values across specific columns. This is what a typical workflow would look like:</p>
+<p>Each of these functions have four manditory options:</p>
+<ul>
+<li>
+<code>x</code>: your data. This will be a vector or data frame depending on the function.</li>
+<li>
+<code>dictionary</code>: This is a data frame with at least two columns specifying keys and values to modify</li>
+<li>
+<code>from</code>: a character or number specifying which column contains the keys</li>
+<li>
+<code>to</code>: a character or number specifying which column contains the values</li>
+</ul>
+<p>Mostly, users will be working with <code><a href="../reference/match_df.html">match_df()</a></code> to transform values across specific columns. A typical workflow would be to:</p>
+<ol style="list-style-type: decimal">
+<li>construct your dictionary in a spreadsheet program based on your data</li>
+<li>read in your data and dictionary to data frames in R</li>
+<li>match!</li>
+</ol>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"matchmaker"</span>)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co"># Read in data set</span></a>
@@ -129,80 +144,345 @@
 <a class="sourceLine" id="cb2-10" data-line-number="10">dict &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="kw"><a href="../reference/matchmaker_example.html">matchmaker_example</a></span>(<span class="st">"spelling-dictionary.csv"</span>),</a>
 <a class="sourceLine" id="cb2-11" data-line-number="11">  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span></a>
 <a class="sourceLine" id="cb2-12" data-line-number="12">)</a></code></pre></div>
+<div id="data" class="section level3">
+<h3 class="hasAnchor">
+<a href="#data" class="anchor"></a>Data</h3>
+<p>This is the top of our data set, generated for example purposes</p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">id</th>
+<th align="left">date</th>
+<th align="left">readmission</th>
+<th align="right">treated</th>
+<th align="left">facility</th>
+<th align="right">age_group</th>
+<th align="left">lab_result_01</th>
+<th align="left">lab_result_02</th>
+<th align="left">lab_result_03</th>
+<th align="left">has_symptoms</th>
+<th align="left">followup</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">ef267c</td>
+<td align="left">2019-07-08</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">C</td>
+<td align="right">10</td>
+<td align="left">unk</td>
+<td align="left">high</td>
+<td align="left">inc</td>
+<td align="left">NA</td>
+<td align="left">u</td>
+</tr>
+<tr class="even">
+<td align="left">e80a37</td>
+<td align="left">2019-07-07</td>
+<td align="left">y</td>
+<td align="right">0</td>
+<td align="left">3</td>
+<td align="right">10</td>
+<td align="left">inc</td>
+<td align="left">unk</td>
+<td align="left">norm</td>
+<td align="left">y</td>
+<td align="left">oui</td>
+</tr>
+<tr class="odd">
+<td align="left">b72883</td>
+<td align="left">2019-07-07</td>
+<td align="left">y</td>
+<td align="right">1</td>
+<td align="left">8</td>
+<td align="right">30</td>
+<td align="left">inc</td>
+<td align="left">norm</td>
+<td align="left">inc</td>
+<td align="left"></td>
+<td align="left">oui</td>
+</tr>
+<tr class="even">
+<td align="left">c9ee86</td>
+<td align="left">2019-07-09</td>
+<td align="left">n</td>
+<td align="right">1</td>
+<td align="left">4</td>
+<td align="right">40</td>
+<td align="left">inc</td>
+<td align="left">inc</td>
+<td align="left">unk</td>
+<td align="left">y</td>
+<td align="left">oui</td>
+</tr>
+<tr class="odd">
+<td align="left">40bc7a</td>
+<td align="left">2019-07-12</td>
+<td align="left">n</td>
+<td align="right">1</td>
+<td align="left">6</td>
+<td align="right">0</td>
+<td align="left">norm</td>
+<td align="left">unk</td>
+<td align="left">norm</td>
+<td align="left">NA</td>
+<td align="left">n</td>
+</tr>
+<tr class="even">
+<td align="left">46566e</td>
+<td align="left">2019-07-14</td>
+<td align="left">y</td>
+<td align="right">NA</td>
+<td align="left">B</td>
+<td align="right">50</td>
+<td align="left">unk</td>
+<td align="left">unk</td>
+<td align="left">inc</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="dictionary" class="section level3">
+<h3 class="hasAnchor">
+<a href="#dictionary" class="anchor"></a>Dictionary</h3>
+<p>The dictionary looks like this:</p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">options</th>
+<th align="left">values</th>
+<th align="left">grp</th>
+<th align="right">orders</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">y</td>
+<td align="left">Yes</td>
+<td align="left">readmission</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">n</td>
+<td align="left">No</td>
+<td align="left">readmission</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">u</td>
+<td align="left">Unknown</td>
+<td align="left">readmission</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">.missing</td>
+<td align="left">Missing</td>
+<td align="left">readmission</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">0</td>
+<td align="left">Yes</td>
+<td align="left">treated</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">1</td>
+<td align="left">No</td>
+<td align="left">treated</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">.missing</td>
+<td align="left">Missing</td>
+<td align="left">treated</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">1</td>
+<td align="left">Facility 1</td>
+<td align="left">facility</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">2</td>
+<td align="left">Facility 2</td>
+<td align="left">facility</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">3</td>
+<td align="left">Facility 3</td>
+<td align="left">facility</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">4</td>
+<td align="left">Facility 4</td>
+<td align="left">facility</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">5</td>
+<td align="left">Facility 5</td>
+<td align="left">facility</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="left">6</td>
+<td align="left">Facility 6</td>
+<td align="left">facility</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="left">7</td>
+<td align="left">Facility 7</td>
+<td align="left">facility</td>
+<td align="right">7</td>
+</tr>
+<tr class="odd">
+<td align="left">8</td>
+<td align="left">Facility 8</td>
+<td align="left">facility</td>
+<td align="right">8</td>
+</tr>
+<tr class="even">
+<td align="left">9</td>
+<td align="left">Facility 9</td>
+<td align="left">facility</td>
+<td align="right">9</td>
+</tr>
+<tr class="odd">
+<td align="left">10</td>
+<td align="left">Facility 10</td>
+<td align="left">facility</td>
+<td align="right">10</td>
+</tr>
+<tr class="even">
+<td align="left">.default</td>
+<td align="left">Unknown</td>
+<td align="left">facility</td>
+<td align="right">11</td>
+</tr>
+<tr class="odd">
+<td align="left">0</td>
+<td align="left">0-9</td>
+<td align="left">age_group</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">10</td>
+<td align="left">10-19</td>
+<td align="left">age_group</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">20</td>
+<td align="left">20-29</td>
+<td align="left">age_group</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">30</td>
+<td align="left">30-39</td>
+<td align="left">age_group</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">40</td>
+<td align="left">40-49</td>
+<td align="left">age_group</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">50</td>
+<td align="left">50+</td>
+<td align="left">age_group</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">high</td>
+<td align="left">High</td>
+<td align="left">.regex ^lab_result_</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">norm</td>
+<td align="left">Normal</td>
+<td align="left">.regex ^lab_result_</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">inc</td>
+<td align="left">Inconclusive</td>
+<td align="left">.regex ^lab_result_</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">y</td>
+<td align="left">yes</td>
+<td align="left">.global</td>
+<td align="right">Inf</td>
+</tr>
+<tr class="odd">
+<td align="left">n</td>
+<td align="left">no</td>
+<td align="left">.global</td>
+<td align="right">Inf</td>
+</tr>
+<tr class="even">
+<td align="left">u</td>
+<td align="left">unknown</td>
+<td align="left">.global</td>
+<td align="right">Inf</td>
+</tr>
+<tr class="odd">
+<td align="left">unk</td>
+<td align="left">unknown</td>
+<td align="left">.global</td>
+<td align="right">Inf</td>
+</tr>
+<tr class="even">
+<td align="left">oui</td>
+<td align="left">yes</td>
+<td align="left">.global</td>
+<td align="right">Inf</td>
+</tr>
+<tr class="odd">
+<td align="left">.missing</td>
+<td align="left">missing</td>
+<td align="left">.global</td>
+<td align="right">Inf</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="matching" class="section level3">
+<h3 class="hasAnchor">
+<a href="#matching" class="anchor"></a>Matching</h3>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># Clean spelling based on dictionary -----------------------------</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">dict <span class="co"># show the dict</span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt;     options       values                 grp orders</span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; 1         y          Yes         readmission      1</span></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; 2         n           No         readmission      2</span></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt; 3         u      Unknown         readmission      3</span></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt; 4  .missing      Missing         readmission      4</span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; 5         0          Yes             treated      1</span></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; 6         1           No             treated      2</span></a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; 7  .missing      Missing             treated      3</span></a>
-<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt; 8         1  Facility  1            facility      1</span></a>
-<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; 9         2  Facility  2            facility      2</span></a>
-<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt; 10        3  Facility  3            facility      3</span></a>
-<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt; 11        4  Facility  4            facility      4</span></a>
-<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt; 12        5  Facility  5            facility      5</span></a>
-<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt; 13        6  Facility  6            facility      6</span></a>
-<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt; 14        7  Facility  7            facility      7</span></a>
-<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt; 15        8  Facility  8            facility      8</span></a>
-<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="co">#&gt; 16        9  Facility  9            facility      9</span></a>
-<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="co">#&gt; 17       10  Facility 10            facility     10</span></a>
-<a class="sourceLine" id="cb3-22" data-line-number="22"><span class="co">#&gt; 18 .default      Unknown            facility     11</span></a>
-<a class="sourceLine" id="cb3-23" data-line-number="23"><span class="co">#&gt; 19        0          0-9           age_group      1</span></a>
-<a class="sourceLine" id="cb3-24" data-line-number="24"><span class="co">#&gt; 20       10        10-19           age_group      2</span></a>
-<a class="sourceLine" id="cb3-25" data-line-number="25"><span class="co">#&gt; 21       20        20-29           age_group      3</span></a>
-<a class="sourceLine" id="cb3-26" data-line-number="26"><span class="co">#&gt; 22       30        30-39           age_group      4</span></a>
-<a class="sourceLine" id="cb3-27" data-line-number="27"><span class="co">#&gt; 23       40        40-49           age_group      5</span></a>
-<a class="sourceLine" id="cb3-28" data-line-number="28"><span class="co">#&gt; 24       50          50+           age_group      6</span></a>
-<a class="sourceLine" id="cb3-29" data-line-number="29"><span class="co">#&gt; 25     high         High .regex ^lab_result_      1</span></a>
-<a class="sourceLine" id="cb3-30" data-line-number="30"><span class="co">#&gt; 26     norm       Normal .regex ^lab_result_      2</span></a>
-<a class="sourceLine" id="cb3-31" data-line-number="31"><span class="co">#&gt; 27      inc Inconclusive .regex ^lab_result_      3</span></a>
-<a class="sourceLine" id="cb3-32" data-line-number="32"><span class="co">#&gt; 28        y          yes             .global    Inf</span></a>
-<a class="sourceLine" id="cb3-33" data-line-number="33"><span class="co">#&gt; 29        n           no             .global    Inf</span></a>
-<a class="sourceLine" id="cb3-34" data-line-number="34"><span class="co">#&gt; 30        u      unknown             .global    Inf</span></a>
-<a class="sourceLine" id="cb3-35" data-line-number="35"><span class="co">#&gt; 31      unk      unknown             .global    Inf</span></a>
-<a class="sourceLine" id="cb3-36" data-line-number="36"><span class="co">#&gt; 32      oui          yes             .global    Inf</span></a>
-<a class="sourceLine" id="cb3-37" data-line-number="37"><span class="co">#&gt; 33 .missing      missing             .global    Inf</span></a>
-<a class="sourceLine" id="cb3-38" data-line-number="38"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(dat) <span class="co"># show the data</span></a>
-<a class="sourceLine" id="cb3-39" data-line-number="39"><span class="co">#&gt;       id       date readmission treated facility age_group lab_result_01</span></a>
-<a class="sourceLine" id="cb3-40" data-line-number="40"><span class="co">#&gt; 1 ef267c 2019-07-08        &lt;NA&gt;       0        C        10           unk</span></a>
-<a class="sourceLine" id="cb3-41" data-line-number="41"><span class="co">#&gt; 2 e80a37 2019-07-07           y       0        3        10           inc</span></a>
-<a class="sourceLine" id="cb3-42" data-line-number="42"><span class="co">#&gt; 3 b72883 2019-07-07           y       1        8        30           inc</span></a>
-<a class="sourceLine" id="cb3-43" data-line-number="43"><span class="co">#&gt; 4 c9ee86 2019-07-09           n       1        4        40           inc</span></a>
-<a class="sourceLine" id="cb3-44" data-line-number="44"><span class="co">#&gt; 5 40bc7a 2019-07-12           n       1        6         0          norm</span></a>
-<a class="sourceLine" id="cb3-45" data-line-number="45"><span class="co">#&gt; 6 46566e 2019-07-14           y      NA        B        50           unk</span></a>
-<a class="sourceLine" id="cb3-46" data-line-number="46"><span class="co">#&gt;   lab_result_02 lab_result_03 has_symptoms followup</span></a>
-<a class="sourceLine" id="cb3-47" data-line-number="47"><span class="co">#&gt; 1          high           inc         &lt;NA&gt;        u</span></a>
-<a class="sourceLine" id="cb3-48" data-line-number="48"><span class="co">#&gt; 2           unk          norm            y      oui</span></a>
-<a class="sourceLine" id="cb3-49" data-line-number="49"><span class="co">#&gt; 3          norm           inc                   oui</span></a>
-<a class="sourceLine" id="cb3-50" data-line-number="50"><span class="co">#&gt; 4           inc           unk            y      oui</span></a>
-<a class="sourceLine" id="cb3-51" data-line-number="51"><span class="co">#&gt; 5           unk          norm         &lt;NA&gt;        n</span></a>
-<a class="sourceLine" id="cb3-52" data-line-number="52"><span class="co">#&gt; 6           unk           inc         &lt;NA&gt;     &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb3-53" data-line-number="53"></a>
-<a class="sourceLine" id="cb3-54" data-line-number="54">cleaned &lt;-<span class="st"> </span><span class="kw"><a href="../reference/match_df.html">match_df</a></span>(dat,</a>
-<a class="sourceLine" id="cb3-55" data-line-number="55">  <span class="dt">dictionary =</span> dict,</a>
-<a class="sourceLine" id="cb3-56" data-line-number="56">  <span class="dt">from =</span> <span class="st">"options"</span>,</a>
-<a class="sourceLine" id="cb3-57" data-line-number="57">  <span class="dt">to =</span> <span class="st">"values"</span>,</a>
-<a class="sourceLine" id="cb3-58" data-line-number="58">  <span class="dt">by =</span> <span class="st">"grp"</span></a>
-<a class="sourceLine" id="cb3-59" data-line-number="59">)</a>
-<a class="sourceLine" id="cb3-60" data-line-number="60"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(cleaned)</a>
-<a class="sourceLine" id="cb3-61" data-line-number="61"><span class="co">#&gt;       id       date readmission treated    facility age_group lab_result_01</span></a>
-<a class="sourceLine" id="cb3-62" data-line-number="62"><span class="co">#&gt; 1 ef267c 2019-07-08     Missing     Yes     Unknown     10-19       unknown</span></a>
-<a class="sourceLine" id="cb3-63" data-line-number="63"><span class="co">#&gt; 2 e80a37 2019-07-07         Yes     Yes Facility  3     10-19  Inconclusive</span></a>
-<a class="sourceLine" id="cb3-64" data-line-number="64"><span class="co">#&gt; 3 b72883 2019-07-07         Yes      No Facility  8     30-39  Inconclusive</span></a>
-<a class="sourceLine" id="cb3-65" data-line-number="65"><span class="co">#&gt; 4 c9ee86 2019-07-09          No      No Facility  4     40-49  Inconclusive</span></a>
-<a class="sourceLine" id="cb3-66" data-line-number="66"><span class="co">#&gt; 5 40bc7a 2019-07-12          No      No Facility  6       0-9        Normal</span></a>
-<a class="sourceLine" id="cb3-67" data-line-number="67"><span class="co">#&gt; 6 46566e 2019-07-14         Yes Missing     Unknown       50+       unknown</span></a>
-<a class="sourceLine" id="cb3-68" data-line-number="68"><span class="co">#&gt;   lab_result_02 lab_result_03 has_symptoms followup</span></a>
-<a class="sourceLine" id="cb3-69" data-line-number="69"><span class="co">#&gt; 1          High  Inconclusive      missing  unknown</span></a>
-<a class="sourceLine" id="cb3-70" data-line-number="70"><span class="co">#&gt; 2       unknown        Normal          yes      yes</span></a>
-<a class="sourceLine" id="cb3-71" data-line-number="71"><span class="co">#&gt; 3        Normal  Inconclusive      missing      yes</span></a>
-<a class="sourceLine" id="cb3-72" data-line-number="72"><span class="co">#&gt; 4  Inconclusive       unknown          yes      yes</span></a>
-<a class="sourceLine" id="cb3-73" data-line-number="73"><span class="co">#&gt; 5       unknown        Normal      missing       no</span></a>
-<a class="sourceLine" id="cb3-74" data-line-number="74"><span class="co">#&gt; 6       unknown  Inconclusive      missing  missing</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-2" data-line-number="2">cleaned &lt;-<span class="st"> </span><span class="kw"><a href="../reference/match_df.html">match_df</a></span>(dat,</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="dt">dictionary =</span> dict,</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">  <span class="dt">from =</span> <span class="st">"options"</span>,</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">  <span class="dt">to =</span> <span class="st">"values"</span>,</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">  <span class="dt">by =</span> <span class="st">"grp"</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">)</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(cleaned)</a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt;       id       date readmission treated    facility age_group lab_result_01</span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; 1 ef267c 2019-07-08     Missing     Yes     Unknown     10-19       unknown</span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; 2 e80a37 2019-07-07         Yes     Yes Facility  3     10-19  Inconclusive</span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt; 3 b72883 2019-07-07         Yes      No Facility  8     30-39  Inconclusive</span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; 4 c9ee86 2019-07-09          No      No Facility  4     40-49  Inconclusive</span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt; 5 40bc7a 2019-07-12          No      No Facility  6       0-9        Normal</span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt; 6 46566e 2019-07-14         Yes Missing     Unknown       50+       unknown</span></a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt;   lab_result_02 lab_result_03 has_symptoms followup</span></a>
+<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt; 1          High  Inconclusive      missing  unknown</span></a>
+<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt; 2       unknown        Normal          yes      yes</span></a>
+<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt; 3        Normal  Inconclusive      missing      yes</span></a>
+<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="co">#&gt; 4  Inconclusive       unknown          yes      yes</span></a>
+<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="co">#&gt; 5       unknown        Normal      missing       no</span></a>
+<a class="sourceLine" id="cb3-22" data-line-number="22"><span class="co">#&gt; 6       unknown  Inconclusive      missing  missing</span></a></code></pre></div>
+</div>
 </div>
 <div id="special-keywords" class="section level1">
 <h1 class="hasAnchor">
@@ -345,6 +625,97 @@
 <p>The drawback to fuzzy matching is that it will convert things that match the pattern, so be very careful when constructing your keys.</p>
 </div>
 </div>
+<div id="working-with-data-frames" class="section level2">
+<h2 class="hasAnchor">
+<a href="#working-with-data-frames" class="anchor"></a>Working with Data Frames</h2>
+<p>When using the <code><a href="../reference/match_df.html">match_df()</a></code> function, you would construct the dictionary same as you would above, with two extra columns that specify the column name in the data frame and the order the resulting values should be (if the column is a factor).</p>
+<p>As with <code><a href="../reference/match_vec.html">match_vec()</a></code>, all the same keywords apply, but now there are also two keywords for the columns:</p>
+<ul>
+<li>
+<code>.regex [pattern]</code>: any column whose name is matched by [pattern]. The [pattern] should be an unquoted, valid, PERL-flavored regular expression. This will match any column that is named with a given pattern. This would commonly be used for recoding results from columns that all start with the same pattern: <code>^lab_result_</code> would match <code>lab_result_QTPCR</code>, <code>lab_result_WBC</code>, <code>lab_result_iron</code>.</li>
+<li>
+<code>.global</code>: defines rules for any column that is a character or factor and any column named in the dictionary. If you want to apply a set of definitions to all valid columns in addition to specified columns, then you can include a <code>.global</code> group in the <code>by</code> column of your ‘dictionary’ data frame. This is useful for setting up a dictionary of common spelling errors. <em>NOTE: specific variable definitions will override global defintions.</em> For example: if you have a column for cardinal directions and a definiton for <code>N = North</code>, then the global variable <code>N = no</code> will not override that.</li>
+</ul>
+</div>
+<div id="matching-columns-with--regex" class="section level2">
+<h2 class="hasAnchor">
+<a href="#matching-columns-with--regex" class="anchor"></a>Matching columns with <code>.regex</code>
+</h2>
+<blockquote>
+<p>Before you use regex, you should be aware of three special symbols that will help anchor your words and prevent any unintended matching.</p>
+</blockquote>
+<ol style="list-style-type: decimal">
+<li>The carrot (<code><a href="https://rdrr.io/r/base/Arithmetic.html">^</a></code>) <strong>should be placed at the beginning of a pattern</strong> to show that it’s the beginning of the word. For example, <code>lab</code> will match both <code>lab_result</code> and <code>granite_slab</code>, but <code>^lab</code> will only match <code>lab_result</code>
+</li>
+<li>The dollar (<code><a href="https://rdrr.io/r/base/Extract.html">$</a></code>) <strong>should be placed at the end of a pattern</strong> to show that it’s the end of a word. For example, <code>date</code> will match both <code>admission_date</code> and <code>date_of_onset</code>, but <code>date$</code> will only match <code>admission_date$</code>.</li>
+<li>The dot (<code>.</code>) <strong>matches any character</strong>. Because it’s common in column names imported by R, it’s a good idea to wrap it in square brackets (<code>[.]</code>) to tell R that you actually mean a dot. For example, <code>^lab.r$</code> will match <code>lab.r</code>, <code>lab_r</code>, and <code>labor</code>, but <code>^lab[.]r$</code> will only match <code>lab.r</code>.</li>
+</ol>
+<p>The best strategy is to use at least one anchor to prevent it greedily selecting columns to match.</p>
+<p>In our example from the top, there are three columns that all start with <code>lab_result_</code>, so we use the <code>.regex ^lab_result</code> keyword:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># view the lab_result columns:</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(labs &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/grep.html">grep</a></span>(<span class="st">"^lab_result_"</span>, <span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(dat), <span class="dt">value =</span> <span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; [1] "lab_result_01" "lab_result_02" "lab_result_03"</span></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(dat[labs])</a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt; 'data.frame':    50 obs. of  3 variables:</span></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt;  $ lab_result_01: chr  "unk" "inc" "inc" "inc" ...</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt;  $ lab_result_02: chr  "high" "unk" "norm" "inc" ...</span></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt;  $ lab_result_03: chr  "inc" "norm" "inc" "unk" ...</span></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co"># show the lab_result part of the dictionary:</span></a>
+<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(dict[<span class="kw"><a href="https://rdrr.io/r/base/grep.html">grep</a></span>(<span class="st">"^[.]regex"</span>, dict<span class="op">$</span>grp), ])</a>
+<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#&gt;    options       values                 grp orders</span></a>
+<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">#&gt; 25    high         High .regex ^lab_result_      1</span></a>
+<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">#&gt; 26    norm       Normal .regex ^lab_result_      2</span></a>
+<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="co">#&gt; 27     inc Inconclusive .regex ^lab_result_      3</span></a>
+<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="co"># clean the data and compare the result</span></a>
+<a class="sourceLine" id="cb8-16" data-line-number="16">cleaned &lt;-<span class="st"> </span><span class="kw"><a href="../reference/match_df.html">match_df</a></span>(dat, dict, </a>
+<a class="sourceLine" id="cb8-17" data-line-number="17">  <span class="dt">from =</span> <span class="st">"options"</span>, </a>
+<a class="sourceLine" id="cb8-18" data-line-number="18">  <span class="dt">to =</span> <span class="st">"values"</span>, </a>
+<a class="sourceLine" id="cb8-19" data-line-number="19">  <span class="dt">by =</span> <span class="st">"grp"</span>, </a>
+<a class="sourceLine" id="cb8-20" data-line-number="20">  <span class="dt">order =</span> <span class="st">"orders"</span></a>
+<a class="sourceLine" id="cb8-21" data-line-number="21">) </a>
+<a class="sourceLine" id="cb8-22" data-line-number="22"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(cleaned[labs])</a>
+<a class="sourceLine" id="cb8-23" data-line-number="23"><span class="co">#&gt; 'data.frame':    50 obs. of  3 variables:</span></a>
+<a class="sourceLine" id="cb8-24" data-line-number="24"><span class="co">#&gt;  $ lab_result_01: chr  "unknown" "Inconclusive" "Inconclusive" "Inconclusive" ...</span></a>
+<a class="sourceLine" id="cb8-25" data-line-number="25"><span class="co">#&gt;  $ lab_result_02: chr  "High" "unknown" "Normal" "Inconclusive" ...</span></a>
+<a class="sourceLine" id="cb8-26" data-line-number="26"><span class="co">#&gt;  $ lab_result_03: chr  "Inconclusive" "Normal" "Inconclusive" "unknown" ...</span></a></code></pre></div>
+</div>
+<div id="using--global-to-clean-up-all-characterfactor-columns" class="section level2">
+<h2 class="hasAnchor">
+<a href="#using--global-to-clean-up-all-characterfactor-columns" class="anchor"></a>Using <code>.global</code> to clean up all character/factor columns</h2>
+<p>We’ve actually seen the <code>.global</code> keyword in use already. Let’s take one more look at the results from above:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># show the lab_result part of the dictionary:</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(dict[<span class="kw"><a href="https://rdrr.io/r/base/grep.html">grep</a></span>(<span class="st">"^[.]regex"</span>, dict<span class="op">$</span>grp), ])</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#&gt;    options       values                 grp orders</span></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#&gt; 25    high         High .regex ^lab_result_      1</span></a>
+<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co">#&gt; 26    norm       Normal .regex ^lab_result_      2</span></a>
+<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co">#&gt; 27     inc Inconclusive .regex ^lab_result_      3</span></a>
+<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co"># show the original data</span></a>
+<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(dat[labs])</a>
+<a class="sourceLine" id="cb9-9" data-line-number="9"><span class="co">#&gt; 'data.frame':    50 obs. of  3 variables:</span></a>
+<a class="sourceLine" id="cb9-10" data-line-number="10"><span class="co">#&gt;  $ lab_result_01: chr  "unk" "inc" "inc" "inc" ...</span></a>
+<a class="sourceLine" id="cb9-11" data-line-number="11"><span class="co">#&gt;  $ lab_result_02: chr  "high" "unk" "norm" "inc" ...</span></a>
+<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="co">#&gt;  $ lab_result_03: chr  "inc" "norm" "inc" "unk" ...</span></a>
+<a class="sourceLine" id="cb9-13" data-line-number="13"><span class="co"># show the modified data</span></a>
+<a class="sourceLine" id="cb9-14" data-line-number="14"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(cleaned[labs])</a>
+<a class="sourceLine" id="cb9-15" data-line-number="15"><span class="co">#&gt; 'data.frame':    50 obs. of  3 variables:</span></a>
+<a class="sourceLine" id="cb9-16" data-line-number="16"><span class="co">#&gt;  $ lab_result_01: chr  "unknown" "Inconclusive" "Inconclusive" "Inconclusive" ...</span></a>
+<a class="sourceLine" id="cb9-17" data-line-number="17"><span class="co">#&gt;  $ lab_result_02: chr  "High" "unknown" "Normal" "Inconclusive" ...</span></a>
+<a class="sourceLine" id="cb9-18" data-line-number="18"><span class="co">#&gt;  $ lab_result_03: chr  "Inconclusive" "Normal" "Inconclusive" "unknown" ...</span></a></code></pre></div>
+<p>Notice above how there are rules for “high”, “norm”, and “inc”, but not for “unk”, which was turned into “unknown”? This is because of the global keywords:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(dict[<span class="kw"><a href="https://rdrr.io/r/base/grep.html">grep</a></span>(<span class="st">"^[.](regex|global)"</span>, dict<span class="op">$</span>grp), ])</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#&gt;     options       values                 grp orders</span></a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; 25     high         High .regex ^lab_result_      1</span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt; 26     norm       Normal .regex ^lab_result_      2</span></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt; 27      inc Inconclusive .regex ^lab_result_      3</span></a>
+<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt; 28        y          yes             .global    Inf</span></a>
+<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt; 29        n           no             .global    Inf</span></a>
+<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt; 30        u      unknown             .global    Inf</span></a>
+<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt; 31      unk      unknown             .global    Inf</span></a>
+<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt; 32      oui          yes             .global    Inf</span></a>
+<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt; 33 .missing      missing             .global    Inf</span></a></code></pre></div>
+<p>The “unk” keyword was defined in our global dictionary and has been used to translate “unk” to “unknown”.</p>
+<p>Of course, be very careful with this one.</p>
+</div>
 </div>
   </div>
 
@@ -361,6 +732,9 @@
 <li><a href="#keys-from-column">Keys (<code>from</code> column)</a></li>
       <li><a href="#values-to-column">Values (<code>to</code> column)</a></li>
       <li><a href="#keyword-demonstration">Keyword demonstration</a></li>
+      <li><a href="#working-with-data-frames">Working with Data Frames</a></li>
+      <li><a href="#matching-columns-with--regex">Matching columns with <code>.regex</code></a></li>
+      <li><a href="#using--global-to-clean-up-all-characterfactor-columns">Using <code>.global</code> to clean up all character/factor columns</a></li>
       </ul>
 </li>
       </ul>
