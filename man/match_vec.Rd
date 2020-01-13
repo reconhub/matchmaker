@@ -124,14 +124,13 @@ match_vec(letters, corrections)
 
 words <- data.frame(
   option_code = c(".regex ^[yY][eE]?[sS]?",
-                  ".regex ^[nN][oO]?",
-                  ".regex ^[uU][nN]?[kK]?",
-                  ".missing"),
+    ".regex ^[nN][oO]?",
+    ".regex ^[uU][nN]?[kK]?",
+    ".missing"),
   option_name = c("Yes", "No", ".na", "Missing"),
   stringsAsFactors = FALSE
 )
 match_vec(c("Y", "Y", NA, "No", "U", "UNK", "N"), words)
-
 }
 \seealso{
 \code{\link[=match_df]{match_df()}} for an implementation that acts across

@@ -90,22 +90,22 @@ all character/factor columns indiscriminantly, then setting
 
 # Read in dictionary and coded date examples --------------------
 
-dict     <- read.csv(matchmaker_example("spelling-dictionary.csv"), 
-                     stringsAsFactors = FALSE)
-dat      <- read.csv(matchmaker_example("coded-data.csv"), 
-                     stringsAsFactors = FALSE)
+dict     <- read.csv(matchmaker_example("spelling-dictionary.csv"),
+  stringsAsFactors = FALSE)
+dat      <- read.csv(matchmaker_example("coded-data.csv"),
+  stringsAsFactors = FALSE)
 dat$date <- as.Date(dat$date)
 
-# Clean spelling based on dictionary ----------------------------- 
+# Clean spelling based on dictionary -----------------------------
 
 dict # show the dict
 head(dat) # show the data
 
 res1 <- match_df(dat,
-                 dictionary = dict,
-                 from = "options",
-                 to = "values",
-                 by = "grp")
+  dictionary = dict,
+  from = "options",
+  to = "values",
+  by = "grp")
 head(res1)
 
 # Show warnings/errors from each column --------------------------
@@ -115,28 +115,27 @@ head(res1)
 # warn = TRUE option:
 
 res1 <- match_df(dat,
-                 dictionary = dict,
-                 from = "options",
-                 to = "values",
-                 by = "grp",
-                 warn = TRUE)
+  dictionary = dict,
+  from = "options",
+  to = "values",
+  by = "grp",
+  warn = TRUE)
 head(res1)
 
 
-# You can ensure the order of the factors are correct by specifying 
+# You can ensure the order of the factors are correct by specifying
 # a column that defines order.
 
 dat[] <- lapply(dat, as.factor)
 as.list(head(dat))
-res2 <- match_df(dat, 
-                 dictionary = dict, 
-                 from = "options",
-                 to = "values",
-                 by = "grp", 
-                 order = "orders")
+res2 <- match_df(dat,
+  dictionary = dict,
+  from = "options",
+  to = "values",
+  by = "grp",
+  order = "orders")
 head(res2)
 as.list(head(res2))
-
 }
 \seealso{
 \code{\link[=match_vec]{match_vec()}}, which this function wraps.

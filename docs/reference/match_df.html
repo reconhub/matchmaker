@@ -238,12 +238,12 @@ all character/factor columns indiscriminantly, then setting
 <span class='co'># Read in dictionary and coded date examples --------------------</span>
 
 <span class='no'>dict</span>     <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/read.table.html'>read.csv</a></span>(<span class='fu'><a href='matchmaker_example.html'>matchmaker_example</a></span>(<span class='st'>"spelling-dictionary.csv"</span>),
-                     <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+  <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='no'>dat</span>      <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/read.table.html'>read.csv</a></span>(<span class='fu'><a href='matchmaker_example.html'>matchmaker_example</a></span>(<span class='st'>"coded-data.csv"</span>),
-                     <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+  <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='no'>dat</span>$<span class='no'>date</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='no'>dat</span>$<span class='no'>date</span>)
 
-<span class='co'># Clean spelling based on dictionary ----------------------------- </span>
+<span class='co'># Clean spelling based on dictionary -----------------------------</span>
 
 <span class='no'>dict</span> <span class='co'># show the dict</span></div><div class='output co'>#&gt;     options       values                 grp orders
 #&gt; 1         y          Yes         readmission      1
@@ -293,10 +293,10 @@ all character/factor columns indiscriminantly, then setting
 #&gt; 5           unk          norm         &lt;NA&gt;        n
 #&gt; 6           unk           inc         &lt;NA&gt;     &lt;NA&gt;</div><div class='input'>
 <span class='no'>res1</span> <span class='kw'>&lt;-</span> <span class='fu'>match_df</span>(<span class='no'>dat</span>,
-                 <span class='kw'>dictionary</span> <span class='kw'>=</span> <span class='no'>dict</span>,
-                 <span class='kw'>from</span> <span class='kw'>=</span> <span class='st'>"options"</span>,
-                 <span class='kw'>to</span> <span class='kw'>=</span> <span class='st'>"values"</span>,
-                 <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"grp"</span>)
+  <span class='kw'>dictionary</span> <span class='kw'>=</span> <span class='no'>dict</span>,
+  <span class='kw'>from</span> <span class='kw'>=</span> <span class='st'>"options"</span>,
+  <span class='kw'>to</span> <span class='kw'>=</span> <span class='st'>"values"</span>,
+  <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"grp"</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>res1</span>)</div><div class='output co'>#&gt;       id       date readmission treated    facility age_group lab_result_01
 #&gt; 1 ef267c 2019-07-08     Missing     Yes     Unknown     10-19       unknown
 #&gt; 2 e80a37 2019-07-07         Yes     Yes Facility  3     10-19  Inconclusive
@@ -318,11 +318,11 @@ all character/factor columns indiscriminantly, then setting
 <span class='co'># warn = TRUE option:</span>
 
 <span class='no'>res1</span> <span class='kw'>&lt;-</span> <span class='fu'>match_df</span>(<span class='no'>dat</span>,
-                 <span class='kw'>dictionary</span> <span class='kw'>=</span> <span class='no'>dict</span>,
-                 <span class='kw'>from</span> <span class='kw'>=</span> <span class='st'>"options"</span>,
-                 <span class='kw'>to</span> <span class='kw'>=</span> <span class='st'>"values"</span>,
-                 <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"grp"</span>,
-                 <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── <span style='font-weight: bold;'>Warnings were found in the following columns</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>● age_group</span></div><div class='output co'>#&gt; <span class='message'>  1. </span><span style='color: #BBBB00;font-style: italic;'>⚠ None of the variables in </span><span style='color: #000000;background-color: #BBBBBB;font-style: italic;'>`age_group`</span><span style='color: #BBBB00;font-style: italic;'> were found in the global</span><span></span>
+  <span class='kw'>dictionary</span> <span class='kw'>=</span> <span class='no'>dict</span>,
+  <span class='kw'>from</span> <span class='kw'>=</span> <span class='st'>"options"</span>,
+  <span class='kw'>to</span> <span class='kw'>=</span> <span class='st'>"values"</span>,
+  <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"grp"</span>,
+  <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── <span style='font-weight: bold;'>Warnings were found in the following columns</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>● age_group</span></div><div class='output co'>#&gt; <span class='message'>  1. </span><span style='color: #BBBB00;font-style: italic;'>⚠ None of the variables in </span><span style='color: #000000;background-color: #BBBBBB;font-style: italic;'>`age_group`</span><span style='color: #BBBB00;font-style: italic;'> were found in the global</span><span></span>
 #&gt; <span class='message'>    </span><span style='color: #BBBB00;font-style: italic;'>dictionary. Did you use the correct dictionary?</span><span></span></div><div class='output co'>#&gt; <span class='message'>● facility</span></div><div class='output co'>#&gt; <span class='message'>  1. </span><span style='color: #BBBB00;font-style: italic;'>⚠ None of the variables in </span><span style='color: #000000;background-color: #BBBBBB;font-style: italic;'>`facility`</span><span style='color: #BBBB00;font-style: italic;'> were found in the global</span><span></span>
 #&gt; <span class='message'>    </span><span style='color: #BBBB00;font-style: italic;'>dictionary. Did you use the correct dictionary?</span><span></span></div><div class='output co'>#&gt; <span class='message'>  2. </span><span style='color: #BBBB00;font-style: italic;'>⚠ 'A', 'B', 'C' were changed to the default value ('Unknown')</span><span></span></div><div class='output co'>#&gt; <span class='message'>● readmission</span></div><div class='output co'>#&gt; <span class='message'>  1. </span><span style='color: #BBBB00;font-style: italic;'>⚠ None of the variables in </span><span style='color: #000000;background-color: #BBBBBB;font-style: italic;'>`readmission`</span><span style='color: #BBBB00;font-style: italic;'> were found in the global</span><span></span>
 #&gt; <span class='message'>    </span><span style='color: #BBBB00;font-style: italic;'>dictionary. Did you use the correct dictionary?</span><span></span></div><div class='output co'>#&gt; <span class='message'>● treated</span></div><div class='output co'>#&gt; <span class='message'>  1. </span><span style='color: #BBBB00;font-style: italic;'>⚠ None of the variables in </span><span style='color: #000000;background-color: #BBBBBB;font-style: italic;'>`treated`</span><span style='color: #BBBB00;font-style: italic;'> were found in the global</span><span></span>
@@ -342,7 +342,7 @@ all character/factor columns indiscriminantly, then setting
 #&gt; 5       unknown        Normal      missing       no
 #&gt; 6       unknown  Inconclusive      missing  missing</div><div class='input'>
 
-<span class='co'># You can ensure the order of the factors are correct by specifying </span>
+<span class='co'># You can ensure the order of the factors are correct by specifying</span>
 <span class='co'># a column that defines order.</span>
 
 <span class='no'>dat</span>[] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='no'>dat</span>, <span class='no'>as.factor</span>)
@@ -390,11 +390,11 @@ all character/factor columns indiscriminantly, then setting
 #&gt; [1] u    oui  oui  oui  n    &lt;NA&gt;
 #&gt; Levels: n oui u unk y
 #&gt; </div><div class='input'><span class='no'>res2</span> <span class='kw'>&lt;-</span> <span class='fu'>match_df</span>(<span class='no'>dat</span>,
-                 <span class='kw'>dictionary</span> <span class='kw'>=</span> <span class='no'>dict</span>,
-                 <span class='kw'>from</span> <span class='kw'>=</span> <span class='st'>"options"</span>,
-                 <span class='kw'>to</span> <span class='kw'>=</span> <span class='st'>"values"</span>,
-                 <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"grp"</span>,
-                 <span class='kw'>order</span> <span class='kw'>=</span> <span class='st'>"orders"</span>)
+  <span class='kw'>dictionary</span> <span class='kw'>=</span> <span class='no'>dict</span>,
+  <span class='kw'>from</span> <span class='kw'>=</span> <span class='st'>"options"</span>,
+  <span class='kw'>to</span> <span class='kw'>=</span> <span class='st'>"values"</span>,
+  <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"grp"</span>,
+  <span class='kw'>order</span> <span class='kw'>=</span> <span class='st'>"orders"</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>res2</span>)</div><div class='output co'>#&gt;       id       date readmission treated    facility age_group lab_result_01
 #&gt; 1 ef267c 2019-07-08     Missing     Yes     Unknown     10-19       unknown
 #&gt; 2 e80a37 2019-07-07         Yes     Yes Facility  3     10-19  Inconclusive
@@ -454,8 +454,7 @@ all character/factor columns indiscriminantly, then setting
 #&gt; $followup
 #&gt; [1] unknown yes     yes     yes     no      missing
 #&gt; Levels: yes no unknown missing
-#&gt; </div><div class='input'>
-</div></span></pre>
+#&gt; </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

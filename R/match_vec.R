@@ -113,14 +113,13 @@
 #'
 #' words <- data.frame(
 #'   option_code = c(".regex ^[yY][eE]?[sS]?",
-#'                   ".regex ^[nN][oO]?",
-#'                   ".regex ^[uU][nN]?[kK]?",
-#'                   ".missing"),
+#'     ".regex ^[nN][oO]?",
+#'     ".regex ^[uU][nN]?[kK]?",
+#'     ".missing"),
 #'   option_name = c("Yes", "No", ".na", "Missing"),
 #'   stringsAsFactors = FALSE
 #' )
 #' match_vec(c("Y", "Y", NA, "No", "U", "UNK", "N"), words)
-#'
 #' @importFrom forcats fct_recode fct_explicit_na fct_relevel
 #' @importFrom rlang "!!!"
 
@@ -140,7 +139,7 @@ match_vec <- function(x = character(), dictionary = data.frame(),
   wl_is_data_frame  <- is.data.frame(dictionary)
 
   wl_is_rectangular <- (wl_is_data_frame || is.matrix(dictionary)) &&
-                        ncol(dictionary) >= 2
+    ncol(dictionary) >= 2
 
   if (!wl_is_rectangular) {
     stop("dictionary must be a data frame with at least two columns")
@@ -201,8 +200,8 @@ match_vec <- function(x = character(), dictionary = data.frame(),
     if (any(na_present)) {
       msg <- "NA was present in the `from` column of %s; replacing with the character 'NA'"
       msg <- paste(msg,
-                   "If you want to indicate missing data, use the '.missing' keyword.",
-                   collapse = "\n")
+        "If you want to indicate missing data, use the '.missing' keyword.",
+        collapse = "\n")
       msg <- sprintf(msg, the_words)
       warning(msg, call. = FALSE)
     }
@@ -247,7 +246,7 @@ match_vec <- function(x = character(), dictionary = data.frame(),
   x <- forcats::fct_recode(x, NULL = "")
 
   # Recode data with forcats --------------------------------------------------
-  suppressWarnings(x <- forcats::fct_recode(x, !!! dict))
+  suppressWarnings(x <- forcats::fct_recode(x, !!!dict))
 
   # Replace NAs if there are any ----------------------------------------------
   if (length(nas) > 0) {

@@ -1,5 +1,9 @@
 # Special Keywords
 
+In addition to strict one-to-one matching, there are a few reserved keywords
+that will help with correcting data. There are reserved keywords for the 'from',
+'to', and 'by' columns in the dictionary. 
+
 ## Keys (`from` column)
 
 The `from` column of the dictionary will contain the keys that you want to match
@@ -17,7 +21,7 @@ of three reserved keywords that start with a full stop:
 > \* Any `NA` values in the keys will be interpreted as "NA" because it's a
 > common mistake to import the value "NA" to missing in R. If you intend for
 > `NA` to indicate missing data, replace it with:
-> `dictionary[[1]][is.na(dictionary[[1]]] <- ".missing"`
+> `dictionary[[1]][is.na(dictionary[[1]])] <- ".missing"`
 
 ## Values (`to` column)
 

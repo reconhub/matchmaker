@@ -41,7 +41,7 @@ process_werrors <- function(warns, errs, dname) {
     ulid <- cli::cli_ol()
     on.exit(cli::cli_end(ulid), add = TRUE, after = FALSE)
 
-    for (i in wrn[[nm]]){
+    for (i in wrn[[nm]]) {
       the_warn <- sprintf("{.emph %s}", i)
       cli::cli_li(the_warn)
     }
@@ -54,7 +54,7 @@ process_werrors <- function(warns, errs, dname) {
   errored <-  length(errs) > 0
 
   if (warned || errored) {
-  
+
     cli::cli_ul()
     if (warned) {
       cli::cli_h2("Warnings were found in the following columns")

@@ -282,14 +282,13 @@ multiple variables in a data frame.</p></div>
 
 <span class='no'>words</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
   <span class='kw'>option_code</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>".regex ^[yY][eE]?[sS]?"</span>,
-                  <span class='st'>".regex ^[nN][oO]?"</span>,
-                  <span class='st'>".regex ^[uU][nN]?[kK]?"</span>,
-                  <span class='st'>".missing"</span>),
+    <span class='st'>".regex ^[nN][oO]?"</span>,
+    <span class='st'>".regex ^[uU][nN]?[kK]?"</span>,
+    <span class='st'>".missing"</span>),
   <span class='kw'>option_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Yes"</span>, <span class='st'>"No"</span>, <span class='st'>".na"</span>, <span class='st'>"Missing"</span>),
   <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )
-<span class='fu'>match_vec</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Y"</span>, <span class='st'>"Y"</span>, <span class='fl'>NA</span>, <span class='st'>"No"</span>, <span class='st'>"U"</span>, <span class='st'>"UNK"</span>, <span class='st'>"N"</span>), <span class='no'>words</span>)</div><div class='output co'>#&gt; [1] "Yes"     "Yes"     "Missing" "No"      NA        NA        "No"     </div><div class='input'>
-</div></pre>
+<span class='fu'>match_vec</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Y"</span>, <span class='st'>"Y"</span>, <span class='fl'>NA</span>, <span class='st'>"No"</span>, <span class='st'>"U"</span>, <span class='st'>"UNK"</span>, <span class='st'>"N"</span>), <span class='no'>words</span>)</div><div class='output co'>#&gt; [1] "Yes"     "Yes"     "Missing" "No"      NA        NA        "No"     </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

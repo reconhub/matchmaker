@@ -487,6 +487,7 @@
 <div id="special-keywords" class="section level1">
 <h1 class="hasAnchor">
 <a href="#special-keywords" class="anchor"></a>Special Keywords</h1>
+<p>In addition to strict one-to-one matching, there are a few reserved keywords that will help with correcting data. There are reserved keywords for the ‘from’, ‘to’, and ‘by’ columns in the dictionary.</p>
 <div id="keys-from-column" class="section level2">
 <h2 class="hasAnchor">
 <a href="#keys-from-column" class="anchor"></a>Keys (<code>from</code> column)</h2>
@@ -500,7 +501,7 @@
 <code>.default</code>: replaces ALL values that are not defined in the dictionary and are not missing.</li>
 </ul>
 <blockquote>
-<p>* Any <code>NA</code> values in the keys will be interpreted as “NA” because it’s a common mistake to import the value “NA” to missing in R. If you intend for <code>NA</code> to indicate missing data, replace it with: <code>dictionary[[1]][is.na(dictionary[[1]]] &lt;- ".missing"</code></p>
+<p>* Any <code>NA</code> values in the keys will be interpreted as “NA” because it’s a common mistake to import the value “NA” to missing in R. If you intend for <code>NA</code> to indicate missing data, replace it with: <code>dictionary[[1]][is.na(dictionary[[1]])] &lt;- ".missing"</code></p>
 </blockquote>
 </div>
 <div id="values-to-column" class="section level2">
@@ -716,6 +717,37 @@
 <p>The “unk” keyword was defined in our global dictionary and has been used to translate “unk” to “unknown”.</p>
 <p>Of course, be very careful with this one.</p>
 </div>
+<div id="warnings" class="section level2">
+<h2 class="hasAnchor">
+<a href="#warnings" class="anchor"></a>Warnings</h2>
+<p>Internally, the <code><a href="../reference/match_vec.html">match_vec()</a></code> function can be quite noisy with warnings for various reasons. Thus, by default, the <code><a href="../reference/match_df.html">match_df()</a></code> function will keep these quiet, but you can have them printed to your console if you use the <code>warn = TRUE</code> option:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">cleaned &lt;-<span class="st"> </span><span class="kw"><a href="../reference/match_df.html">match_df</a></span>(dat, dict, </a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">  <span class="dt">from =</span> <span class="st">"options"</span>, </a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">  <span class="dt">to =</span> <span class="st">"values"</span>, </a>
+<a class="sourceLine" id="cb11-4" data-line-number="4">  <span class="dt">by =</span> <span class="st">"grp"</span>, </a>
+<a class="sourceLine" id="cb11-5" data-line-number="5">  <span class="dt">order =</span> <span class="st">"orders"</span>,</a>
+<a class="sourceLine" id="cb11-6" data-line-number="6">  <span class="dt">warn =</span> <span class="ot">TRUE</span></a>
+<a class="sourceLine" id="cb11-7" data-line-number="7">) </a>
+<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-9" data-line-number="9"><span class="co">#&gt; ── Warnings were found in the following columns ──</span></a>
+<a class="sourceLine" id="cb11-10" data-line-number="10"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-11" data-line-number="11"><span class="co">#&gt; ● age_group</span></a>
+<a class="sourceLine" id="cb11-12" data-line-number="12"><span class="co">#&gt;   1. ⚠ None of the variables in `age_group` were found in the global</span></a>
+<a class="sourceLine" id="cb11-13" data-line-number="13"><span class="co">#&gt;     dictionary. Did you use the correct dictionary?</span></a>
+<a class="sourceLine" id="cb11-14" data-line-number="14"><span class="co">#&gt; ● facility</span></a>
+<a class="sourceLine" id="cb11-15" data-line-number="15"><span class="co">#&gt;   1. ⚠ None of the variables in `facility` were found in the global</span></a>
+<a class="sourceLine" id="cb11-16" data-line-number="16"><span class="co">#&gt;     dictionary. Did you use the correct dictionary?</span></a>
+<a class="sourceLine" id="cb11-17" data-line-number="17"><span class="co">#&gt;   2. ⚠ 'A', 'B', 'C' were changed to the default value ('Unknown')</span></a>
+<a class="sourceLine" id="cb11-18" data-line-number="18"><span class="co">#&gt; ● readmission</span></a>
+<a class="sourceLine" id="cb11-19" data-line-number="19"><span class="co">#&gt;   1. ⚠ None of the variables in `readmission` were found in the global</span></a>
+<a class="sourceLine" id="cb11-20" data-line-number="20"><span class="co">#&gt;     dictionary. Did you use the correct dictionary?</span></a>
+<a class="sourceLine" id="cb11-21" data-line-number="21"><span class="co">#&gt; ● treated</span></a>
+<a class="sourceLine" id="cb11-22" data-line-number="22"><span class="co">#&gt;   1. ⚠ None of the variables in `treated` were found in the global</span></a>
+<a class="sourceLine" id="cb11-23" data-line-number="23"><span class="co">#&gt;     dictionary. Did you use the correct dictionary?</span></a>
+<a class="sourceLine" id="cb11-24" data-line-number="24"><span class="co">#&gt; ● id</span></a>
+<a class="sourceLine" id="cb11-25" data-line-number="25"><span class="co">#&gt;   1. ⚠ None of the variables in `id` were found in `dict`. Did you use the</span></a>
+<a class="sourceLine" id="cb11-26" data-line-number="26"><span class="co">#&gt;     correct dictionary?</span></a></code></pre></div>
+</div>
 </div>
   </div>
 
@@ -735,6 +767,7 @@
       <li><a href="#working-with-data-frames">Working with Data Frames</a></li>
       <li><a href="#matching-columns-with--regex">Matching columns with <code>.regex</code></a></li>
       <li><a href="#using--global-to-clean-up-all-characterfactor-columns">Using <code>.global</code> to clean up all character/factor columns</a></li>
+      <li><a href="#warnings">Warnings</a></li>
       </ul>
 </li>
       </ul>
