@@ -26,10 +26,10 @@ process_werrors <- function(warns, errs, dname) {
 
   alertfun <- function(nm, wrn, dname, color = "yellow") {
     nam <- sprintf("{.code %s}", nm)
-    dnam <- sprintf("in {.code %s}", dname)
+    dnam <- sprintf("\\1 {.code %s}\\2", dname)
     wrn[[nm]] <- gsub("x[[i_x]]", nam, wrn[[nm]], fixed = TRUE)
-    wrn[[nm]] <- gsub("in g.", "in the global dictionary", wrn[[nm]], fixed = TRUE)
-    wrn[[nm]] <- gsub("in d.", dnam, wrn[[nm]], fixed = TRUE)
+    wrn[[nm]] <- gsub("(in|of) g([.;:])", "\\1 the global dictionary\\2", wrn[[nm]], perl = TRUE)
+    wrn[[nm]] <- gsub("(in|of) d([.;:])", dnam, wrn[[nm]], perl = TRUE)
     cols <- c("yellow" = cli::symbol$warning, "red" = cli::symbol$error)
     sym  <- paste(cols[color], "")
 

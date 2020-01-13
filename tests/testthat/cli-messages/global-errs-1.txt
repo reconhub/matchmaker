@@ -9,21 +9,21 @@ Message:
 
 Message: ● raboof
 
-Message:   1. ! Duplicate keys were found in the `from` column of d: ".missing" only
-    the first instance will be used.
+Message:   1. ! Duplicate keys were found in the `from` column of `corrections`:
+    ".missing" only the first instance will be used.
 
 Message: ● treatment
 
-Message:   1. ! Duplicate keys were found in the `from` column of d: ".missing" only
-    the first instance will be used.
+Message:   1. ! Duplicate keys were found in the `from` column of `corrections`:
+    ".missing" only the first instance will be used.
 
 Message: ● region
 
-Message:   1. ! None of the variables in `region` were found in `corrections` Did you
+Message:   1. ! None of the variables in `region` were found in `corrections`. Did you
     use the correct dictionary?
 
-Message:   2. ! Duplicate keys were found in the `from` column of d: ".missing" only
-    the first instance will be used.
+Message:   2. ! Duplicate keys were found in the `from` column of `corrections`:
+    ".missing" only the first instance will be used.
 
     raboof treatment      region
 1        a         e     Alabama
