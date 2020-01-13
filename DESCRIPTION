@@ -15,10 +15,11 @@ Authors@R: c(
            family = "Barks", 
            email = "patrick.barks@epicentre.msf.org", 
            role = c("ctb")))
-Description: The 'matchmaker' package provides flexible dictionary-based
+Description: Provides flexible dictionary-based
     cleaning that allows users to specify implicit and explicit missing data,
     regular expressions for both data and columns, and global matches, while
-    respecting ordering of factors. 
+    respecting ordering of factors. This package is part of the 'RECON'
+    (<https://www.repidemicsconsortium.org/>) toolkit for outbreak analysis.
 URL: https://repidemicsconsortium/matchmaker, https://github.com/reconhub/matchmaker
 License: GPL-3
 Suggests: 

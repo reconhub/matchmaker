@@ -19,7 +19,7 @@ Message:   1. ! Duplicate keys were found in the `from` column of d: ".missing" 
 
 Message: ● region
 
-Message:   1. ! None of the variables in x[[i_x]] were found in d. Did you use the
+Message:   1. ! None of the variables in `region` were found in `cxns` Did you use the
     correct dictionary?
 
 Message:   2. ! Duplicate keys were found in the `from` column of d: ".missing" only
