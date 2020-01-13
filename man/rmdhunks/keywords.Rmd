@@ -6,13 +6,13 @@ The `from` column of the dictionary will contain the keys that you want to match
 in your current data set. These are expected to match exactly with the exception
 of three reserved keywords that start with a full stop:
 
- - `.regex [pattern]`: will replace anything matching [pattern]. This is executed
-before any other replacements are made. The [pattern] should be an unquoted,
-valid, PERL-flavored regular expression. Any whitespace padding the regular
-expression is discarded.
+ - `.regex [pattern]`: will replace anything matching [pattern]. This is
+   executed before any other replacements are made. The [pattern] should be an
+   unquoted, valid, PERL-flavored regular expression. Any whitespace padding
+   the regular expression is discarded.
  - `.missing`: replaces any blank cells or `NA` values.
- - `.default`: replaces ALL values that are not defined in the dictionary and 
-are not missing.
+ - `.default`: replaces ALL values that are not defined in the dictionary and
+   are not missing.
 
 > \* Any `NA` values in the keys will be interpreted as "NA" because it's a
 > common mistake to import the value "NA" to missing in R. If you intend for

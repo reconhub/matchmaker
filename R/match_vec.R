@@ -125,9 +125,9 @@
 #' @importFrom rlang "!!!"
 
 match_vec <- function(x = character(), dictionary = data.frame(),
-                           from = 1, to = 2,
-                           quiet = FALSE, warn_default = TRUE,
-                           anchor_regex = TRUE) {
+                      from = 1, to = 2,
+                      quiet = FALSE, warn_default = TRUE,
+                      anchor_regex = TRUE) {
 
   if (length(x) == 0 || !is.atomic(x)) {
     stop("x must be coerceable to a character")

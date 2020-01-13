@@ -1,0 +1,89 @@
+## Working with Data Frames
+
+When using the `match_df()` function, you would construct the dictionary same
+as you would above, with two extra columns that specify the column name in the
+data frame and the order the resulting values should be (if the column is a
+factor).
+
+As with `match_vec()`, all the same keywords apply, but now there are also two
+keywords for the columns:
+
+ - `.regex [pattern]`: any column whose name is matched by [pattern]. The
+   [pattern] should be an unquoted, valid, PERL-flavored regular expression.
+   This will match any column that is named with a given pattern. This would
+   commonly be used for recoding results from columns that all start with the
+   same pattern: `^lab_result_` would match `lab_result_QTPCR`,
+   `lab_result_WBC`, `lab_result_iron`. 
+ - `.global`: defines rules for any column that is a character or factor and
+   any column named in the dictionary. If you want to apply a set of
+   definitions to all valid columns in addition to specified columns, then you
+   can include a `.global` group in the `by` column of your ‘dictionary’ data
+   frame. This is useful for setting up a dictionary of common spelling errors.
+   _NOTE: specific variable definitions will override global defintions._ For
+   example: if you have a column for cardinal directions and a definiton for `N
+   = North`, then the global variable `N = no` will not override that. 
+
+## Matching columns with `.regex`
+
+> `r cli::cli_alert_warning("Before you use regex, you should be aware of three special symbols that will help anchor your words and prevent any unintended matching.")`
+
+1. The carrot (`^`) **should be placed at the beginning of a pattern** to show
+   that it's the beginning of the word. For example, `lab` will match both
+   `lab_result` and `granite_slab`, but `^lab` will only match `lab_result`
+2. The dollar (`$`) **should be placed at the end of a pattern** to show that it's
+   the end of a word. For example, `date` will match both `admission_date` and 
+   `date_of_onset`, but `date$` will only match `admission_date$`.
+3. The dot (`.`) **matches any character**. Because it's common in column names
+   imported by R, it's a good idea to wrap it in square brackets (`[.]`) to
+   tell R that you actually mean a dot. For example, `^lab.r$` will match
+   `lab.r`, `lab_r`, and `labor`, but `^lab[.]r$` will only match `lab.r`.
+
+The best strategy is to use at least one anchor to prevent it greedily selecting
+columns to match. 
+
+In our example from the top, there are three columns that all start with 
+`lab_result_`, so we use the `.regex ^lab_result` keyword:
+
+```{r regex-df}
+# view the lab_result columns:
+print(labs <- grep("^lab_result_", names(dat), value = TRUE))
+str(dat[labs])
+# show the lab_result part of the dictionary:
+print(dict[grep("^[.]regex", dict$grp), ])
+# clean the data and compare the result
+cleaned <- match_df(dat, dict, 
+  from = "options", 
+  to = "values", 
+  by = "grp", 
+  order = "orders"
+) 
+str(cleaned[labs])
+```
+
+## Using `.global` to clean up all character/factor columns
+
+We've actually seen the `.global` keyword in use already. Let's take one more
+look at the results from above:
+
+```{r global-df}
+# show the lab_result part of the dictionary:
+print(dict[grep("^[.]regex", dict$grp), ])
+# show the original data
+str(dat[labs])
+# show the modified data
+str(cleaned[labs])
+```
+
+Notice above how there are rules for "high", "norm", and "inc", but not for
+"unk", which was turned into "unknown"? This is because of the global keywords:
+
+```{r global-keys}
+print(dict[grep("^[.](regex|global)", dict$grp), ])
+```
+
+The "unk" keyword was defined in our global dictionary and has been used to
+translate "unk" to "unknown".
+
+Of course, be very careful with this one.
+
+

@@ -108,6 +108,21 @@ res1 <- match_df(dat,
                  by = "grp")
 head(res1)
 
+# Show warnings/errors from each column --------------------------
+# Internally, the `match_vec()` function can be quite noisy with warnings for
+# various reasons. Thus, by default, the `match_df()` function will keep
+# these quiet, but you can have them printed to your console if you use the
+# warn = TRUE option:
+
+res1 <- match_df(dat,
+                 dictionary = dict,
+                 from = "options",
+                 to = "values",
+                 by = "grp",
+                 warn = TRUE)
+head(res1)
+
+
 # You can ensure the order of the factors are correct by specifying 
 # a column that defines order.
 

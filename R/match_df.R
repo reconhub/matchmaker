@@ -92,6 +92,21 @@
 #'                  to = "values",
 #'                  by = "grp")
 #' head(res1)
+#'
+#' # Show warnings/errors from each column --------------------------
+#' # Internally, the `match_vec()` function can be quite noisy with warnings for
+#' # various reasons. Thus, by default, the `match_df()` function will keep
+#' # these quiet, but you can have them printed to your console if you use the
+#' # warn = TRUE option:
+#'
+#' res1 <- match_df(dat,
+#'                  dictionary = dict,
+#'                  from = "options",
+#'                  to = "values",
+#'                  by = "grp",
+#'                  warn = TRUE)
+#' head(res1)
+#'
 #' 
 #' # You can ensure the order of the factors are correct by specifying 
 #' # a column that defines order.
@@ -279,6 +294,8 @@ match_df <- function(x = data.frame(), dictionary = list(), from = 1, to = 2,
   iter_print <- gsub(" ", "_", format(to_iterate_x))
   names(iter_print) <- names(warns) <- names(errs) <- to_iterate_x
 
+  the_call <- match.call()
+  dname    <- deparse(the_call[["dictionary"]])
   # Loop over the variables and clean spelling --------------------------------
   for (i in seq_along(to_iterate_x)) {
     
@@ -323,7 +340,7 @@ match_df <- function(x = data.frame(), dictionary = list(), from = 1, to = 2,
 
   # Process warnings and errors and give a warning if there were any
   if (warn) {
-    wemsg <- process_werrors(warns, errs)
+    wemsg <- process_werrors(warns, errs, dname)
   }
 
   x

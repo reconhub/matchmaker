@@ -1,7 +1,8 @@
 
-The goal of matchmaker is to provide dictionary-based cleaning for R users in a
-simple and intuitive manner built on the {forcats} package. Some of the features
-of this package include:
+The goal of {matchmaker} is to provide dictionary-based cleaning for R users in
+a simple and intuitive manner built on the
+[{forcats}](https://forcats.tidyverse.org) package. Some of the features of
+this package include:
 
  - preservation of factor orders
  - ability to specify explicit and implicit missing values
@@ -10,9 +11,8 @@ of this package include:
 
 ## Installation
 
-You can install the development version of matchmaker from GitHub with:
+You can install {matchmaker} from CRAN:
 
 ``` r
-# install.packages("remotes")
-remotes::install_github("reconhub/matchmaker")
+install.packages("matchmaker")
 ```
