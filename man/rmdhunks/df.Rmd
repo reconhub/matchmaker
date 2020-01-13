@@ -87,4 +87,20 @@ translate "unk" to "unknown".
 
 Of course, be very careful with this one.
 
+## Warnings
+
+Internally, the `match_vec()` function can be quite noisy with warnings for
+various reasons. Thus, by default, the `match_df()` function will keep these
+quiet, but you can have them printed to your console if you use the `warn =
+TRUE` option:
+
+```{r the_warning, message = TRUE}
+cleaned <- match_df(dat, dict, 
+  from = "options", 
+  to = "values", 
+  by = "grp", 
+  order = "orders",
+  warn = TRUE
+) 
+```
 
