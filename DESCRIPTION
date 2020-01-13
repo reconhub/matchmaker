@@ -1,5 +1,5 @@
 Package: matchmaker
-Title: Flexible dictionary-based cleaning
+Title: Flexible Dictionary-Based Cleaning
 Version: 0.1.0
 Authors@R: c(
     person(given = "Zhian N.",
@@ -20,7 +20,7 @@ Description: Provides flexible dictionary-based
     regular expressions for both data and columns, and global matches, while
     respecting ordering of factors. This package is part of the 'RECON'
     (<https://www.repidemicsconsortium.org/>) toolkit for outbreak analysis.
-URL: https://repidemicsconsortium/matchmaker, https://github.com/reconhub/matchmaker
+URL: https://www.repidemicsconsortium.org/matchmaker, https://github.com/reconhub/matchmaker
 License: GPL-3
 Suggests: 
     testthat (>= 2.1.0),
