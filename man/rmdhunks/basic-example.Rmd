@@ -7,8 +7,20 @@ The matchmaker package has two user-facing functions that perform dictionary-bas
  - `match_vec()` will translate the values in a single vector
  - `match_df()` will translate values in all specified columns of a data frame 
  
+Each of these functions have four manditory options:
+
+ - `x`: your data. This will be a vector or data frame depending on the function.
+ - `dictionary`: This is a data frame with at least two columns specifying keys
+   and values to modify
+ - `from`: a character or number specifying which column contains the keys
+ - `to`: a character or number specifying which column contains the values
+
 Mostly, users will be working with `match_df()` to transform values across
-specific columns. This is what a typical workflow would look like:
+specific columns. A typical workflow would be to:
+
+1. construct your dictionary in a spreadsheet program based on your data
+2. read in your data and dictionary to data frames in R
+3. match! 
 
 ```{r setup}
 library("matchmaker")
@@ -25,12 +37,26 @@ dict <- read.csv(matchmaker_example("spelling-dictionary.csv"),
 )
 ```
 
+### Data
+
+This is the top of our data set, generated for example purposes
+
+```{r show_data, echo = FALSE}
+knitr::kable(head(dat))
+```
+
+### Dictionary
+
+The dictionary looks like this:
+
+```{r show_dictionary, echo = FALSE}
+knitr::kable(dict)
+```
+
+### Matching
+
 ```{r example}
 # Clean spelling based on dictionary -----------------------------
-
-dict # show the dict
-head(dat) # show the data
-
 cleaned <- match_df(dat,
   dictionary = dict,
   from = "options",

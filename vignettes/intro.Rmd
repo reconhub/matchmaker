@@ -23,3 +23,6 @@ knitr::opts_chunk$set(
 
 ```{r keywords-hunk, child="../man/rmdhunks/keywords.Rmd"}
 ```
+
+```{r df-hunk, child="../man/rmdhunks/df.Rmd"}
+```

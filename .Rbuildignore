@@ -2,6 +2,7 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^README\.Rmd$
+^README\.html$
 ^cran-comments\.md$
 ^\.github$
 ^\.travis\.yml$
@@ -10,3 +11,4 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^CRAN-RELEASE$

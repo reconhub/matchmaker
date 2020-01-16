@@ -7,7 +7,7 @@ Message:
 
 Message: ● raboof
 
-Message:   1. ! Duplicate keys were found in the `from` column of d: "foubar",
+Message:   1. ! Duplicate keys were found in the `from` column of `corr`: "foubar",
     "foobr", "fubar", ".missing", "unknown" only the first instance will be
     used.
 
@@ -16,8 +16,8 @@ Message:   2. ! 'a', 'b', 'c', 'd', 'e', 'fumar' were changed to the default val
 
 Message: ● treatment
 
-Message:   1. ! Duplicate keys were found in the `from` column of d: "Yes", "Y", "No",
-    "N", ".missing" only the first instance will be used.
+Message:   1. ! Duplicate keys were found in the `from` column of `corr`: "Yes", "Y",
+    "No", "N", ".missing" only the first instance will be used.
 
 Message:   2. ! 'a', 'b', 'c', 'd', 'e' were changed to the default value ('check
     data')

@@ -1,9 +1,9 @@
 #' Check and clean spelling or codes of multiple variables in a data frame
 #'
-#' @description This function allows you to clean your data according to 
+#' @description This function allows you to clean your data according to
 #' pre-defined rules encapsulated in either a data frame or list of data frames.
 #' It has application for addressing mis-spellings and recoding variables (e.g.
-#' from electronic survey data). 
+#' from electronic survey data).
 #'
 #' @param dictionary a data frame or named list of data frames with at least two
 #'   columns defining the word list to be used. If this is a data frame, a third
@@ -18,8 +18,8 @@
 #' @param order a character the column to be used for sorting the values in
 #'   each data frame. If the incoming variables are factors, this determines how
 #'   the resulting factors will be sorted.
-#' 
-#' @param warn if `TRUE`, warnings and errors from [match_vec()] will be 
+#'
+#' @param warn if `TRUE`, warnings and errors from [match_vec()] will be
 #'   shown as a single warning. Defaults to `FALSE`, which shows nothing.
 #'
 #' @inheritParams match_vec
@@ -30,7 +30,7 @@
 #'   columns as well.
 #'
 #' \subsection{`by` column}{
-#' 
+#'
 #' Spelling variables within `dictionary` represent keys that you want to match
 #' to column names in `x` (the data set). These are expected to match exactly
 #' with the exception of two reserved keywords that starts with a full stop:
@@ -42,7 +42,7 @@
 #' }
 #'
 #' \subsection{Global dictionary}{
-#' 
+#'
 #' A global dictionary is a set of definitions applied to all valid columns of
 #' `x` indiscriminantly.
 #'
@@ -56,13 +56,13 @@
 #'  Example.
 #'
 #'  - **`by = NULL`**: If you want your data frame to be applied to
-#'    all character/factor columns indiscriminantly, then setting 
+#'    all character/factor columns indiscriminantly, then setting
 #'    `by = NULL` will use that dictionary globally.
 #'
 #' }
 #'
 #'
-#' @return a data frame with re-defined data based on the dictionary 
+#' @return a data frame with re-defined data based on the dictionary
 #'
 #' @seealso [match_vec()], which this function wraps.
 #'
@@ -72,44 +72,58 @@
 #' @export
 #'
 #' @examples
-#' 
+#'
 #' # Read in dictionary and coded date examples --------------------
 #'
-#' dict     <- read.csv(matchmaker_example("spelling-dictionary.csv"), 
-#'                      stringsAsFactors = FALSE)
-#' dat      <- read.csv(matchmaker_example("coded-data.csv"), 
-#'                      stringsAsFactors = FALSE)
+#' dict     <- read.csv(matchmaker_example("spelling-dictionary.csv"),
+#'   stringsAsFactors = FALSE)
+#' dat      <- read.csv(matchmaker_example("coded-data.csv"),
+#'   stringsAsFactors = FALSE)
 #' dat$date <- as.Date(dat$date)
 #'
-#' # Clean spelling based on dictionary ----------------------------- 
+#' # Clean spelling based on dictionary -----------------------------
 #'
 #' dict # show the dict
 #' head(dat) # show the data
-#' 
+#'
 #' res1 <- match_df(dat,
-#'                  dictionary = dict,
-#'                  from = "options",
-#'                  to = "values",
-#'                  by = "grp")
+#'   dictionary = dict,
+#'   from = "options",
+#'   to = "values",
+#'   by = "grp")
 #' head(res1)
-#' 
-#' # You can ensure the order of the factors are correct by specifying 
+#'
+#' # Show warnings/errors from each column --------------------------
+#' # Internally, the `match_vec()` function can be quite noisy with warnings for
+#' # various reasons. Thus, by default, the `match_df()` function will keep
+#' # these quiet, but you can have them printed to your console if you use the
+#' # warn = TRUE option:
+#'
+#' res1 <- match_df(dat,
+#'   dictionary = dict,
+#'   from = "options",
+#'   to = "values",
+#'   by = "grp",
+#'   warn = TRUE)
+#' head(res1)
+#'
+#'
+#' # You can ensure the order of the factors are correct by specifying
 #' # a column that defines order.
 #'
 #' dat[] <- lapply(dat, as.factor)
 #' as.list(head(dat))
-#' res2 <- match_df(dat, 
-#'                  dictionary = dict, 
-#'                  from = "options",
-#'                  to = "values",
-#'                  by = "grp", 
-#'                  order = "orders")
+#' res2 <- match_df(dat,
+#'   dictionary = dict,
+#'   from = "options",
+#'   to = "values",
+#'   by = "grp",
+#'   order = "orders")
 #' head(res2)
 #' as.list(head(res2))
-#' 
 match_df <- function(x = data.frame(), dictionary = list(), from = 1, to = 2,
                      by = 3, order = NULL, warn = FALSE) {
-  
+
   if (length(x) == 0 || !is.data.frame(x)) {
     stop("x must be a data frame")
   }
@@ -119,10 +133,10 @@ match_df <- function(x = data.frame(), dictionary = list(), from = 1, to = 2,
   # Define columns viable for manipulation ------------------------------------
   # Because this is a global manipulator, only work on characters or factors
   unprotected <- names(x)[classes]
-  
+
   if (length(dictionary) == 0 || !is.list(dictionary)) {
     stop("dictionary must be a list of data frames")
-  } 
+  }
 
   # There is one big dictionary with by -----------------------------
   if (is.data.frame(dictionary)) {
@@ -143,14 +157,14 @@ match_df <- function(x = data.frame(), dictionary = list(), from = 1, to = 2,
       if (valid_by) {
         byname <- names(dictionary[by])
 
-        # Discard any rows that are completely missing ----------- 
+        # Discard any rows that are completely missing -----------
         norows <- apply(dictionary,
           MARGIN = 1,
           FUN    = function(i, b) !all(is.na(i[b])),
           b      = c(from, to)
         )
         dictionary <- dictionary[norows, , drop = FALSE]
-        
+
         # Split the dictionary here -------------------------------
         dictionary <- split(dictionary, dictionary[[byname]])
       } else {
@@ -174,7 +188,7 @@ match_df <- function(x = data.frame(), dictionary = list(), from = 1, to = 2,
 
   one_big_dictionary <- is.data.frame(dictionary)
   exists_order       <- !is.null(order)
-  
+
   if (one_big_dictionary) {
     # If there is one big dictionary ------------------------------------
     if (exists_order && order %in% names(dictionary)) {
@@ -196,61 +210,61 @@ match_df <- function(x = data.frame(), dictionary = list(), from = 1, to = 2,
     global_words <- dictionary[[".global"]]
     dictionary   <- dictionary[names(dictionary) != ".global"]
     has_global   <- !is.null(global_words)
-    
+
     # Identify columns of x to clean, and matching entry in dictionary ----------
-    
+
     # Extract vars to check from dictionary (both plain and regex) ------------
     vars_check   <- names(dictionary)
     is_var_regex <- grepl("^\\.regex[[:space:]]", vars_check)
-    
+
     # If any .regex keys... ------------
     if (any(is_var_regex)) {
-      
+
       vars_check_plain <- vars_check[!is_var_regex]
       vars_check_regex <- vars_check[is_var_regex]
       vars_check_regex_extract <- gsub("\\.regex[[:space:]]", "", vars_check_regex)
-      
+
       # which cols in x match each regex var (1 element for each .regex key)
       vars_regex_match_list <- lapply(
         vars_check_regex_extract,
         FUN = grep,
         x = names(x), value = TRUE, perl = TRUE
       )
-      
+
       # check for dictionary variables with no match in x
       vars_regex_match_n <- lengths(vars_regex_match_list)
       vars_plain_nomatch <- vars_check_plain[!vars_check_plain %in% names(x)]
       vars_regex_nomatch <- vars_check_regex[vars_regex_match_n == 0]
       vars_nomatch <- unique(c(vars_plain_nomatch, vars_regex_nomatch))
-      
+
       # all columns of x that match variable in dictionary
       cols_match_plain <- vars_check_plain[vars_check_plain %in% names(x)]
       cols_match_regex <- unlist(vars_regex_match_list, use.names = FALSE)
       cols_match <- c(cols_match_plain, cols_match_regex)
-      
+
       # dictionary variable name corresponding to each matching column in x
       matching_var_plain <- cols_match_plain
       matching_var_regex <- rep(vars_check_regex, vars_regex_match_n)
       matching_var <- c(matching_var_plain, matching_var_regex)
-      
+
       # columns of x to iterate over, and matching key from dictionary
       to_iterate_x <- cols_match
       to_iterate_dictionary <- matching_var
-      
-    # Else no .regex keys, column names in x and dictionary keys matched literally
-    } else { 
-      
+
+      # Else no .regex keys, column names in x and dictionary keys matched literally
+    } else {
+
       to_iterate_x <- to_iterate_dictionary <- intersect(vars_check, names(x))
       vars_nomatch <- setdiff(vars_check, names(x))
     }
-    
+
     # Warn if any variables in dictionary don't match any columns in x ------
     if (length(vars_nomatch) > 0) {
       warning("The following variable(s) in the dictionary did not match any ",
-              "columns in 'x': ", paste(vars_nomatch, collapse = ", "),
-              call. = FALSE)
+        "columns in 'x': ", paste(vars_nomatch, collapse = ", "),
+        call. = FALSE)
     }
-    
+
     # If .global keyword in dictionary, add all uprotected columns to to_iterate_
     if (has_global) {
       unprotected_to_add <- setdiff(unprotected, to_iterate_x)
@@ -260,47 +274,49 @@ match_df <- function(x = data.frame(), dictionary = list(), from = 1, to = 2,
   }
 
   # check if there is a ".default" value in the global dictionary
-  global_with_default <- one_big_dictionary && 
-    any(dictionary[[1]] == ".default") || 
+  global_with_default <- one_big_dictionary &&
+    any(dictionary[[1]] == ".default") ||
     (
-     !one_big_dictionary && 
-     has_global && 
-     any(global_words[[1]] == ".default")
+      !one_big_dictionary &&
+        has_global &&
+        any(global_words[[1]] == ".default")
     )
 
   if (global_with_default) {
-  
+
     stop("the .default keyword cannot be used with .global")
-  
+
   }
-  
+
   # Prepare warning/error labels ---------------------------------------------
   warns <- errs <- vector(mode = "list", length = length(to_iterate_x))
   iter_print <- gsub(" ", "_", format(to_iterate_x))
   names(iter_print) <- names(warns) <- names(errs) <- to_iterate_x
 
+  the_call <- match.call()
+  dname    <- deparse(the_call[["dictionary"]])
   # Loop over the variables and clean spelling --------------------------------
   for (i in seq_along(to_iterate_x)) {
-    
+
     i_x <- to_iterate_x[i]
     i_w <- to_iterate_dictionary[i]
-    
+
     d <- if (one_big_dictionary) dictionary else dictionary[[i_w]]
 
     if (is.null(d)) {
-    # d is null because this is a variable without a specific spelling def
+      # d is null because this is a variable without a specific spelling def
       d <- global_words
     } else if (!one_big_dictionary) {
-    # d is not null, but the input has specific variables
+      # d is not null, but the input has specific variables
       # find the words that match the dictionary
       gw <- !global_words[[1]] %in% d[[1]]
       if (sum(gw) > 0) {
-      # If there are still global words to clean, pass them through
+        # If there are still global words to clean, pass them through
         g <- global_words[gw, , drop = FALSE]
         w <- withWarnings({
           match_vec(x[[i_x]], g, from = from, to = to, quiet = FALSE)
         })
-        x[[i_x]] <- if(is.null(w$val)) x[[i_x]] else w$val
+        x[[i_x]] <- if (is.null(w$val)) x[[i_x]] else w$val
         if (warn) {
           warns[[i_x]] <- collect_ya_errs(w$warnings, iter_print[i_x])
           errs[[i_x]]  <- collect_ya_errs(w$errors, iter_print[i_x])
@@ -314,7 +330,7 @@ match_df <- function(x = data.frame(), dictionary = list(), from = 1, to = 2,
     w <- withWarnings({
       match_vec(x[[i_x]], d, from = from, to = to, quiet = FALSE)
     })
-    x[[i_x]] <- if(is.null(w$val)) x[[i_x]] else w$val
+    x[[i_x]] <- if (is.null(w$val)) x[[i_x]] else w$val
     if (warn) {
       warns[[i_x]] <- c(warns[[i_x]], collect_ya_errs(w$warnings, iter_print[i_x]))
       errs[[i_x]]  <- c(errs[[i_x]], collect_ya_errs(w$errors, iter_print[i_x]))
@@ -323,7 +339,7 @@ match_df <- function(x = data.frame(), dictionary = list(), from = 1, to = 2,
 
   # Process warnings and errors and give a warning if there were any
   if (warn) {
-    wemsg <- process_werrors(warns, errs)
+    wemsg <- process_werrors(warns, errs, dname)
   }
 
   x
