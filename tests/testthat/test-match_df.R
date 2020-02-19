@@ -14,7 +14,8 @@ clist <- split(corrections, corrections$column)
 my_data_frame <- data.frame(
   raboof = c(letters[1:5], "foubar", "foobr", "fubar", "", "unknown", "fumar"),
   treatment = c(letters[5:1], "Y", "Yes", "N", NA, "No", "yes"),
-  region = state.name[1:11]
+  region = state.name[1:11],
+  stringsAsFactors = TRUE
 )
 
 cleaned_data <- data.frame(
@@ -24,7 +25,8 @@ cleaned_data <- data.frame(
   treatment = factor(c(letters[5:1], "yes", "yes", "no", "missing", "no", "yes"),
     levels = c("yes", "no", "missing", letters[1:5])
   ),
-  region = state.name[1:11]
+  region = state.name[1:11],
+  stringsAsFactors = TRUE
 )
 }
 

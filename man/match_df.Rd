@@ -90,9 +90,9 @@ all character/factor columns indiscriminantly, then setting
 
 # Read in dictionary and coded date examples --------------------
 
-dict     <- read.csv(matchmaker_example("spelling-dictionary.csv"),
+dict <- read.csv(matchmaker_example("spelling-dictionary.csv"),
   stringsAsFactors = FALSE)
-dat      <- read.csv(matchmaker_example("coded-data.csv"),
+dat <- read.csv(matchmaker_example("coded-data.csv"),
   stringsAsFactors = FALSE)
 dat$date <- as.Date(dat$date)
 
