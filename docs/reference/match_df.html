@@ -72,7 +72,7 @@ from electronic survey data)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">matchmaker</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
       </span>
     </div>
 
@@ -237,9 +237,9 @@ all character/factor columns indiscriminantly, then setting
     <pre class="examples"><div class='input'>
 <span class='co'># Read in dictionary and coded date examples --------------------</span>
 
-<span class='no'>dict</span>     <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/read.table.html'>read.csv</a></span>(<span class='fu'><a href='matchmaker_example.html'>matchmaker_example</a></span>(<span class='st'>"spelling-dictionary.csv"</span>),
+<span class='no'>dict</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/read.table.html'>read.csv</a></span>(<span class='fu'><a href='matchmaker_example.html'>matchmaker_example</a></span>(<span class='st'>"spelling-dictionary.csv"</span>),
   <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='no'>dat</span>      <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/read.table.html'>read.csv</a></span>(<span class='fu'><a href='matchmaker_example.html'>matchmaker_example</a></span>(<span class='st'>"coded-data.csv"</span>),
+<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/read.table.html'>read.csv</a></span>(<span class='fu'><a href='matchmaker_example.html'>matchmaker_example</a></span>(<span class='st'>"coded-data.csv"</span>),
   <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='no'>dat</span>$<span class='no'>date</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='no'>dat</span>$<span class='no'>date</span>)
 
