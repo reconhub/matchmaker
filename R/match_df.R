@@ -316,7 +316,7 @@ match_df <- function(x = data.frame(), dictionary = list(), from = 1, to = 2,
         w <- withWarnings({
           match_vec(x[[i_x]], g, from = from, to = to, quiet = FALSE)
         })
-        x[[i_x]] <- if (is.null(w$val)) x[[i_x]] else w$val
+        x[[i_x]] <- if (is.null(w$value)) x[[i_x]] else w$value
         if (warn) {
           warns[[i_x]] <- collect_ya_errs(w$warnings, iter_print[i_x])
           errs[[i_x]]  <- collect_ya_errs(w$errors, iter_print[i_x])
@@ -330,7 +330,7 @@ match_df <- function(x = data.frame(), dictionary = list(), from = 1, to = 2,
     w <- withWarnings({
       match_vec(x[[i_x]], d, from = from, to = to, quiet = FALSE)
     })
-    x[[i_x]] <- if (is.null(w$val)) x[[i_x]] else w$val
+    x[[i_x]] <- if (is.null(w$value)) x[[i_x]] else w$value
     if (warn) {
       warns[[i_x]] <- c(warns[[i_x]], collect_ya_errs(w$warnings, iter_print[i_x]))
       errs[[i_x]]  <- c(errs[[i_x]], collect_ya_errs(w$errors, iter_print[i_x]))
